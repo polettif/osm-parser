@@ -14,38 +14,38 @@ import java.util.Map;
  *
  * @author Willy Tiengo
  */
-public class Relation extends AbstractNode {
+public class OsmRelation extends AbstractNode {
 
     private OSM osm;
-    public List<Member> members;
+    public List<OsmMember> osmMembers;
 
-    public Relation(OSM osm, String id, String visible, String timestamp,
-            String version, String changeset, String user,
-            String uid, List<Member> members, Map<String, String> tags) {
+    public OsmRelation(OSM osm, String id, String visible, String timestamp,
+                       String version, String changeset, String user,
+                       String uid, List<OsmMember> osmMembers, Map<String, String> tags) {
 
         super(id, visible, timestamp, version, changeset, user, uid, tags);
         this.osm = osm;
-        this.members = members;
+        this.osmMembers = osmMembers;
     }
 
     /**
-     * @return The MultiLineString of all ways members of this relation. If any
-     *         way members can not be found in the datase, returns
+     * @return The MultiLineString of all ways osmMembers of this relation. If any
+     *         way osmMembers can not be found in the datase, returns
      *         <code>null</code>.
      */
     public Polygon getPolygon() {
-        Way way;
-        List<Coordinate> lines = new ArrayList<Coordinate>();
+        OsmWay osmWay;
+        List<Coordinate> lines = new ArrayList<>();
 
-        for (Member member : members) {
-            if (isWay(member)) {
-                way = osm.getWay(member.ref);
+        for (OsmMember osmMember : osmMembers) {
+            if (isWay(osmMember)) {
+                osmWay = osm.getWay(osmMember.ref);
 
-                if (way == null) {
+                if (osmWay == null) {
                     return null;
                 }
 
-                List<Coordinate> coord = Arrays.asList(way.getLineString().getCoordinates());
+                List<Coordinate> coord = Arrays.asList(osmWay.getLineString().getCoordinates());
 
                 if (!lines.isEmpty()) {
                     Coordinate c = lines.get(lines.size() - 1);
@@ -96,7 +96,7 @@ public class Relation extends AbstractNode {
         return (pol != null) ? WKBWriter.bytesToHex(new WKBWriter().write(pol)) : null;
     }
 
-    private boolean isWay(Member m) {
+    private boolean isWay(OsmMember m) {
         return m.type.equals("way");
     }
 }

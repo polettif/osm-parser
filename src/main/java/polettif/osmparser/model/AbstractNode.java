@@ -40,9 +40,9 @@ public class AbstractNode {
 			return false;
 		}
 
-		final OSMNode other = (OSMNode) obj;
+		final OsmNode other = (OsmNode) obj;
 
-		return (id != null ? id.equals(other.id) : false);
+		return (id != null && id.equals(other.id));
 
 	}
 

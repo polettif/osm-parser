@@ -4,8 +4,8 @@ import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.junit.Test;
 import polettif.osmparser.model.OSM;
-import polettif.osmparser.model.Relation;
-import polettif.osmparser.model.Way;
+import polettif.osmparser.model.OsmRelation;
+import polettif.osmparser.model.OsmWay;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -16,10 +16,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author zuq
  */
-public class OSMParserTest {
-
-	public OSMParserTest() {
-	}
+public class OsmParserTest {
 
 	@Test
 	public void testTest() throws Exception {
@@ -27,13 +24,13 @@ public class OSMParserTest {
 		InputStream bis = new BufferedInputStream(getClass().getResourceAsStream("/montenegro-latest.osm.bz2"));
 		CompressorInputStream input = new CompressorStreamFactory().createCompressorInputStream(bis);
 
-		OSM osm = OSMParser.parse(input);
+		OSM osm = OsmParser.parse(input);
 		assertEquals(990250, osm.getNodes().size());
-		assertEquals(61263, osm.getWays().size());
-		assertEquals(517, osm.getRelations().size());
+		assertEquals(61263, osm.getOsmWays().size());
+		assertEquals(517, osm.getOsmRelations().size());
 
 		boolean found = false;
-		for(Way w : osm.getWays()) {
+		for(OsmWay w : osm.getOsmWays()) {
 			if(w.getName() != null) {
 				if(w.getName().equals("Бучичко гробље")) {
 					assertTrue(w.getAllTags().containsKey("religion"));
@@ -46,7 +43,7 @@ public class OSMParserTest {
 		}
 		assertTrue(found);
 		found = false;
-		for(Relation r : osm.getRelations()) {
+		for(OsmRelation r : osm.getOsmRelations()) {
 			if(r.getName() != null && r.getName().equals("Čapljina - Hum - Dubrovnik")) {
 				assertTrue(r.getAllTags().containsKey("railway"));
 				assertTrue(r.getAllTags().containsKey("route"));

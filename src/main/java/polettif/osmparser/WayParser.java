@@ -3,8 +3,8 @@ package polettif.osmparser;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.model.OSMNode;
-import polettif.osmparser.model.Way;
+import polettif.osmparser.model.OsmNode;
+import polettif.osmparser.model.OsmWay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +19,14 @@ public class WayParser {
 		return node.getNodeName().equals("way");
 	}
 
-	public static Way parseWay(Node wayNode, Map<String, OSMNode> nodes) {
-		Way way;
+	public static OsmWay parseWay(Node wayNode, Map<String, OsmNode> nodes) {
+		OsmWay osmWay;
 
 		NamedNodeMap atts = wayNode.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
-		way = new Way(
+		osmWay = new OsmWay(
 				id,
 				getAttribute(atts, "visible"),
 				getAttribute(atts, "timestamp"),
@@ -35,9 +35,9 @@ public class WayParser {
 				getAttribute(atts, "user"),
 				getAttribute(atts, "uid"),
 				getNodes(wayNode.getChildNodes(), nodes),
-				OSMParser.parseTags(wayNode.getChildNodes()));
+				OsmParser.parseTags(wayNode.getChildNodes()));
 
-		return way;
+		return osmWay;
 	}
 
 	// Private Methods ---------------------------------------------------------
@@ -47,8 +47,8 @@ public class WayParser {
 		return (node == null) ? null : node.getNodeValue();
 	}
 
-	private static List<OSMNode> getNodes(NodeList children, Map<String, OSMNode> nodes) {
-		List<OSMNode> result = new ArrayList<OSMNode>();
+	private static List<OsmNode> getNodes(NodeList children, Map<String, OsmNode> nodes) {
+		List<OsmNode> result = new ArrayList<>();
 
 		Node node;
 		String nodeName;

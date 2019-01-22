@@ -15,12 +15,12 @@ import java.util.Map;
 /**
  * @author Willy Tiengo
  */
-public class OSMNode extends AbstractNode {
+public class OsmNode extends AbstractNode {
 
 	public String lat;
 	public String lon;
 
-	public OSMNode(String id, String visible, String timestamp, String version, String changeset, String user, String uid, String lat, String lon, Map<String, String> tags) {
+	public OsmNode(String id, String visible, String timestamp, String version, String changeset, String user, String uid, String lat, String lon, Map<String, String> tags) {
 		super(id, visible, timestamp, version, changeset, user, uid, tags);
 		this.lat = lat;
 		this.lon = lon;

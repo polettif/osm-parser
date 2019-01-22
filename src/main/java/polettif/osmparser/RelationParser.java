@@ -3,9 +3,9 @@ package polettif.osmparser;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.model.Member;
+import polettif.osmparser.model.OsmMember;
 import polettif.osmparser.model.OSM;
-import polettif.osmparser.model.Relation;
+import polettif.osmparser.model.OsmRelation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,12 @@ public class RelationParser {
 		return node.getNodeName().equals("relation");
 	}
 
-	public static Relation parseRelation(OSM osm, Node node) {
+	public static OsmRelation parseRelation(OSM osm, Node node) {
 		NamedNodeMap atts = node.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
-		return new Relation(osm, id,
+		return new OsmRelation(osm, id,
 				getAttribute(atts, "visible"),
 				getAttribute(atts, "timestamp"),
 				getAttribute(atts, "version"),
@@ -32,7 +32,7 @@ public class RelationParser {
 				getAttribute(atts, "user"),
 				getAttribute(atts, "uid"),
 				getMembers(node.getChildNodes()),
-				OSMParser.parseTags(node.getChildNodes()));
+				OsmParser.parseTags(node.getChildNodes()));
 	}
 
 	// Private Methods ---------------------------------------------------------
@@ -42,19 +42,19 @@ public class RelationParser {
 		return (node == null) ? null : node.getNodeValue();
 	}
 
-	private static List<Member> getMembers(NodeList children) {
-		List<Member> result;
+	private static List<OsmMember> getMembers(NodeList children) {
+		List<OsmMember> result;
 		Node node;
 		NamedNodeMap map;
 
-		result = new ArrayList<Member>();
+		result = new ArrayList<>();
 
 		for(int i = 0; i < children.getLength(); i++) {
 			node = children.item(i);
 			map = node.getAttributes();
 
 			if(node.getNodeName().equals("member")) {
-				result.add(new Member(
+				result.add(new OsmMember(
 						map.getNamedItem("type").getNodeValue(),
 						map.getNamedItem("ref").getNodeValue(),
 						map.getNamedItem("role").getNodeValue()));

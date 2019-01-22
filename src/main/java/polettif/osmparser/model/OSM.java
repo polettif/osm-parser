@@ -8,39 +8,39 @@ import java.util.Set;
  */
 public class OSM {
 
-	private Set<OSMNode> nodes;
-	private Set<Way> ways;
-	private Set<Relation> relations;
+	private Set<OsmNode> nodes;
+	private Set<OsmWay> osmWays;
+	private Set<OsmRelation> osmRelations;
 
 	public OSM() {
-		nodes = new HashSet<OSMNode>();
-		ways = new HashSet<Way>();
-		relations = new HashSet<Relation>();
+		nodes = new HashSet<>();
+		osmWays = new HashSet<>();
+		osmRelations = new HashSet<>();
 	}
 
-	public OSM(Set<OSMNode> nodes, Set<Way> ways,
-	           Set<Relation> relations) {
+	public OSM(Set<OsmNode> nodes, Set<OsmWay> osmWays,
+	           Set<OsmRelation> osmRelations) {
 		this.nodes = nodes;
-		this.ways = ways;
-		this.relations = relations;
+		this.osmWays = osmWays;
+		this.osmRelations = osmRelations;
 	}
 
-	public Set<OSMNode> getNodes() {
+	public Set<OsmNode> getNodes() {
 		return nodes;
 	}
 
-	public Set<Relation> getRelations() {
-		return relations;
+	public Set<OsmRelation> getOsmRelations() {
+		return osmRelations;
 	}
 
-	public Set<Way> getWays() {
-		return ways;
+	public Set<OsmWay> getOsmWays() {
+		return osmWays;
 	}
 
-	public Way getWay(String id) {
-		for(Way way : ways) {
-			if(way.id.equals(id)) {
-				return way;
+	public OsmWay getWay(String id) {
+		for(OsmWay osmWay : osmWays) {
+			if(osmWay.id.equals(id)) {
+				return osmWay;
 			}
 		}
 		return null;

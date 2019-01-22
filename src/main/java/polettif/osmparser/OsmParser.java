@@ -4,9 +4,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import polettif.osmparser.model.OSM;
-import polettif.osmparser.model.OSMNode;
-import polettif.osmparser.model.Relation;
-import polettif.osmparser.model.Way;
+import polettif.osmparser.model.OsmNode;
+import polettif.osmparser.model.OsmRelation;
+import polettif.osmparser.model.OsmWay;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,61 +16,55 @@ import java.util.*;
 /**
  * @author Willy Tiengo
  */
-public class OSMParser {
+public class OsmParser {
 
 	/**
 	 *
 	 */
 	public static OSM parse(InputStream is) throws Exception {
 
-		Document doc;
-		DocumentBuilder builder;
+		Node xmlNode;
+		NodeList xmlNodesList;
 
-		Node node;
-		NodeList nodesList;
+		Map<String, OsmNode> nodes = new LinkedHashMap<>();
 
-		Map<String, OSMNode> nodes = new LinkedHashMap<String, OSMNode>();
+		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document doc = builder.parse(is);
 
-		builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		doc = builder.parse(is);
-
-		nodesList = doc.getChildNodes().item(0).getChildNodes();
+		xmlNodesList = doc.getChildNodes().item(0).getChildNodes();
 
 		OSM osm = new OSM();
-		for(int i = 0; i < nodesList.getLength(); i++) {
+		for(int i = 0; i < xmlNodesList.getLength(); i++) {
 
-			node = nodesList.item(i);
+			xmlNode = xmlNodesList.item(i);
 
-			if(NodeParser.isNode(node)) {
-
-				OSMNode osmNode = NodeParser.parseNode(node);
+			if(NodeParser.isNode(xmlNode)) {
+				OsmNode osmNode = NodeParser.parseNode(xmlNode);
 				nodes.put(osmNode.id, osmNode);
 				osm.getNodes().add(osmNode);
 
-			} else if(WayParser.isWay(node)) {
-				Way way = WayParser.parseWay(node, nodes);
-				osm.getWays().add(way);
+			} else if(WayParser.isWay(xmlNode)) {
+				OsmWay osmWay = WayParser.parseWay(xmlNode, nodes);
+				osm.getOsmWays().add(osmWay);
 
-			} else if(RelationParser.isRelation(node)) {
-
-				Relation relation = RelationParser.parseRelation(osm, node);
-				osm.getRelations().add(relation);
+			} else if(RelationParser.isRelation(xmlNode)) {
+				OsmRelation osmRelation = RelationParser.parseRelation(osm, xmlNode);
+				osm.getOsmRelations().add(osmRelation);
 
 			}
 		}
 
-		Set<OSMNode> nodeset = new HashSet<>();
-
-		for(String n : nodes.keySet()) {
-			nodeset.add(nodes.get(n));
-		}
+//		Set<OsmNode> nodeset = new HashSet<>();
+//		for(String n : nodes.keySet()) {
+//			nodeset.add(nodes.get(n));
+//		}
 
 		return osm;
 	}
 
 	protected static Map<String, String> parseTags(NodeList nodes) {
 
-		Map<String, String> tags = new HashMap<String, String>();
+		Map<String, String> tags = new HashMap<>();
 
 		for(int i = 0; i < nodes.getLength(); i++) {
 

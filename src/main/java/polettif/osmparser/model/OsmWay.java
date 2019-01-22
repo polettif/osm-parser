@@ -18,28 +18,28 @@ import java.util.Map;
  *
  * @author Willy Tiengo
  */
-public class Way extends AbstractNode {
+public class OsmWay extends AbstractNode {
 
     // Constants ---------------------------------------------------------------
     public static final String HIGHWAY = "highway";
     //Attributes ---------------------------------------------------------------
-    public List<OSMNode> nodes;
+    public List<OsmNode> nodes;
 
-    public Way(String id, String visible, String timestamp,
-            String version, String changeset, String user,
-            String uid, List<OSMNode> nodes, Map<String, String> tags) {
+    public OsmWay(String id, String visible, String timestamp,
+                  String version, String changeset, String user,
+                  String uid, List<OsmNode> nodes, Map<String, String> tags) {
 
         super(id, visible, timestamp, version, changeset, user, uid, tags);
         this.nodes = nodes;
     }
 
     public LineString getLineString() {
-        List<Coordinate> coords = new ArrayList<Coordinate>();
+        List<Coordinate> coords = new ArrayList<>();
         GeometryFactory fac = new GeometryFactory(
                );
 
         Coordinate c1;
-        for (OSMNode node : nodes) {
+        for (OsmNode node : nodes) {
             c1 = new Coordinate(Double.parseDouble(node.lon), Double.parseDouble(node.lat));
             coords.add(c1);
         }
@@ -54,7 +54,7 @@ public class Way extends AbstractNode {
     public boolean isOneway() {
         String oneway = tags.get("oneway");
 
-        return ((oneway != null) ? oneway.equals("yes") : false);
+        return ((oneway != null) && oneway.equals("yes"));
 
     }
 
@@ -66,7 +66,7 @@ public class Way extends AbstractNode {
         double lenMiddle, distance, lineDistance;
         GeometryFactory fac = new GeometryFactory();
 
-        OSMNode n1 = null, n2 = null;
+        OsmNode n1 = null, n2 = null;
 
         lenMiddle = wayLength(nodes) / 2;
         distance = 0d;
@@ -124,9 +124,9 @@ public class Way extends AbstractNode {
     }
     
     // Private methods ---------------------------------------------------------
-    private double wayLength(List<OSMNode> nodes) {
+    private double wayLength(List<OsmNode> nodes) {
         double length = 0d;
-        OSMNode n1, n2;
+        OsmNode n1, n2;
 
         n1 = nodes.get(0);
 
@@ -143,7 +143,7 @@ public class Way extends AbstractNode {
         return length;
     }
 
-    private static Double lineDistance(OSMNode n1, OSMNode n2) {
+    private static Double lineDistance(OsmNode n1, OsmNode n2) {
 
         return LatLongUtil.distance(
                 Double.parseDouble(n1.lat), Double.parseDouble(n1.lon),
