@@ -1,9 +1,7 @@
-package br.zuq.osm.parser.model;
+package polettif.osmparser.model;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.WKBWriter;
 import java.util.ArrayList;

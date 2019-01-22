@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.zuq.osm.parser.model;
+package polettif.osmparser.model;
 
-import br.zuq.osm.parser.util.LatLongUtil;
+import polettif.osmparser.util.LatLongUtil;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;

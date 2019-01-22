@@ -1,4 +1,4 @@
-package br.zuq.osm.parser.util;
+package polettif.osmparser.util;
 
 public class LatLongUtil {
 
