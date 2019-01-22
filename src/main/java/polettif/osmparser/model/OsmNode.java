@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Willy Tiengo
  */
-public class OsmNode extends AbstractNode {
+public class OsmNode extends OsmElement {
 
 	public String lat;
 	public String lon;

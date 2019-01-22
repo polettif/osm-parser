@@ -5,9 +5,9 @@ import java.util.Map;
 /**
  * @author Willy Tiengo
  */
-public class AbstractNode {
+public class OsmElement {
 
-	public String id;
+	public Long id;
 	public String visible;
 	public String timestamp;
 	public String version;
@@ -16,10 +16,23 @@ public class AbstractNode {
 	public String uid;
 	public Map<String, String> tags;
 
-	public AbstractNode(String id, String visible, String timestamp,
-	                    String version, String changeset, String user, String uid,
-	                    Map<String, String> tags) {
+	public OsmElement(String id, String visible, String timestamp,
+	                  String version, String changeset, String user, String uid,
+	                  Map<String, String> tags) {
 
+		this.id = Long.valueOf(id);
+		this.visible = visible;
+		this.timestamp = timestamp;
+		this.version = version;
+		this.changeset = changeset;
+		this.user = user;
+		this.uid = uid;
+		this.tags = tags;
+	}
+
+	public OsmElement(long id, String visible, String timestamp,
+	                  String version, String changeset, String user, String uid,
+	                  Map<String, String> tags) {
 		this.id = id;
 		this.visible = visible;
 		this.timestamp = timestamp;
@@ -28,7 +41,6 @@ public class AbstractNode {
 		this.user = user;
 		this.uid = uid;
 		this.tags = tags;
-
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author Willy Tiengo
  */
-public class OsmWay extends AbstractNode {
+public class OsmWay extends OsmElement {
 
     // Constants ---------------------------------------------------------------
     public static final String HIGHWAY = "highway";

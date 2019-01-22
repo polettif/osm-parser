@@ -14,12 +14,12 @@ import java.util.Map;
  *
  * @author Willy Tiengo
  */
-public class OsmRelation extends AbstractNode {
+public class OsmRelation extends OsmElement {
 
     private OSM osm;
     public List<OsmMember> osmMembers;
 
-    public OsmRelation(OSM osm, String id, String visible, String timestamp,
+    public OsmRelation(OSM osm, Long id, String visible, String timestamp,
                        String version, String changeset, String user,
                        String uid, List<OsmMember> osmMembers, Map<String, String> tags) {
 

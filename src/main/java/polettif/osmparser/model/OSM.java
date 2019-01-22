@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class OSM {
 
-	private Map<String, OsmNode> osmNodes;
-	private Map<String, OsmWay> osmWays;
-	private Map<String, OsmRelation> osmRelations;
+	private Map<Long, OsmNode> osmNodes;
+	private Map<Long, OsmWay> osmWays;
+	private Map<Long, OsmRelation> osmRelations;
 
 
 	public OSM() {
@@ -19,26 +19,26 @@ public class OSM {
 		osmRelations = new HashMap<>();
 	}
 
-	public OSM(Map<String, OsmNode> nodes, Map<String, OsmWay> osmWays,
-	           Map<String, OsmRelation> osmRelations) {
+	public OSM(Map<Long, OsmNode> nodes, Map<Long, OsmWay> osmWays,
+	           Map<Long, OsmRelation> osmRelations) {
 		this.osmNodes = nodes;
 		this.osmWays = osmWays;
 		this.osmRelations = osmRelations;
 	}
 
-	public Map<String, OsmNode> getNodes() {
+	public Map<Long, OsmNode> getNodes() {
 		return osmNodes;
 	}
 
-	public Map<String, OsmRelation> getRelations() {
+	public Map<Long, OsmRelation> getRelations() {
 		return osmRelations;
 	}
 
-	public Map<String, OsmWay> getWays() {
+	public Map<Long, OsmWay> getWays() {
 		return osmWays;
 	}
 
-	public OsmWay getWay(String id) {
+	public OsmWay getWay(Long id) {
 		for(OsmWay osmWay : osmWays.values()) {
 			if(osmWay.id.equals(id)) {
 				return osmWay;

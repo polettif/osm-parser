@@ -22,7 +22,8 @@ public class RelationParser {
 	public static OsmRelation parseRelation(OSM osm, Node xmlNodeRelation) {
 		NamedNodeMap atts = xmlNodeRelation.getAttributes();
 
-		String id = atts.getNamedItem("id").getNodeValue();
+		String strId = atts.getNamedItem("id").getNodeValue();
+		long id = Long.parseLong(strId);
 
 		return new OsmRelation(osm, id,
 				getAttribute(atts, "visible"),

@@ -48,7 +48,7 @@ public class WayParser {
 		return (node == null) ? null : node.getNodeValue();
 	}
 
-	private static List<OsmNode> getNodes(NodeList children, Map<String, OsmNode> nodes) {
+	private static List<OsmNode> getNodes(NodeList children, Map<Long, OsmNode> nodes) {
 		List<OsmNode> result = new ArrayList<>();
 
 		Node node;
@@ -60,10 +60,10 @@ public class WayParser {
 			nodeName = node.getNodeName();
 
 			if(nodeName.equals("nd")) {
+				String memberId = node.getAttributes().
+						getNamedItem("ref").getNodeValue();
 
-				result.add(nodes.get(node.getAttributes().
-						getNamedItem("ref").getNodeValue()));
-
+				result.add(nodes.get(Long.valueOf(memberId)));
 			}
 		}
 
