@@ -3,8 +3,8 @@ package polettif.osmparser;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.model.OsmMember;
 import polettif.osmparser.model.OSM;
+import polettif.osmparser.model.OsmMember;
 import polettif.osmparser.model.OsmRelation;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ public class RelationParser {
 		return node.getNodeName().equals("relation");
 	}
 
-	public static OsmRelation parseRelation(OSM osm, Node node) {
-		NamedNodeMap atts = node.getAttributes();
+	public static OsmRelation parseRelation(OSM osm, Node xmlNodeRelation) {
+		NamedNodeMap atts = xmlNodeRelation.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
@@ -31,8 +31,8 @@ public class RelationParser {
 				getAttribute(atts, "changeset"),
 				getAttribute(atts, "user"),
 				getAttribute(atts, "uid"),
-				getMembers(node.getChildNodes()),
-				OsmParser.parseTags(node.getChildNodes()));
+				getMembers(xmlNodeRelation.getChildNodes()),
+				OsmParser.parseTags(xmlNodeRelation.getChildNodes()));
 	}
 
 	// Private Methods ---------------------------------------------------------

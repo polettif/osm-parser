@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package polettif.osmparser;
 
 import org.w3c.dom.NamedNodeMap;
@@ -17,8 +13,8 @@ public class NodeParser {
 		return (node.getNodeName().equals("node"));
 	}
 
-	public static OsmNode parseNode(Node node) {
-		NamedNodeMap atts = node.getAttributes();
+	public static OsmNode parseNode(Node xmlNodeNode) {
+		NamedNodeMap atts = xmlNodeNode.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
@@ -31,7 +27,7 @@ public class NodeParser {
 				getAttribute(atts, "uid"),
 				getAttribute(atts, "lat"),
 				getAttribute(atts, "lon"),
-				OsmParser.parseTags(node.getChildNodes()));
+				OsmParser.parseTags(xmlNodeNode.getChildNodes()));
 
 		return osmNode;
 	}

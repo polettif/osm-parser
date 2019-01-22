@@ -26,11 +26,11 @@ public class OsmParserTest {
 
 		OSM osm = OsmParser.parse(input);
 		assertEquals(990250, osm.getNodes().size());
-		assertEquals(61263, osm.getOsmWays().size());
-		assertEquals(517, osm.getOsmRelations().size());
+		assertEquals(61263, osm.getWays().size());
+		assertEquals(517, osm.getRelations().size());
 
 		boolean found = false;
-		for(OsmWay w : osm.getOsmWays()) {
+		for(OsmWay w : osm.getWays().values()) {
 			if(w.getName() != null) {
 				if(w.getName().equals("Бучичко гробље")) {
 					assertTrue(w.getAllTags().containsKey("religion"));
@@ -43,7 +43,7 @@ public class OsmParserTest {
 		}
 		assertTrue(found);
 		found = false;
-		for(OsmRelation r : osm.getOsmRelations()) {
+		for(OsmRelation r : osm.getRelations().values()) {
 			if(r.getName() != null && r.getName().equals("Čapljina - Hum - Dubrovnik")) {
 				assertTrue(r.getAllTags().containsKey("railway"));
 				assertTrue(r.getAllTags().containsKey("route"));

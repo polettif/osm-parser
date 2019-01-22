@@ -1,48 +1,62 @@
 package polettif.osmparser.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Willy Tiengo
  */
 public class OSM {
 
-	private Set<OsmNode> nodes;
-	private Set<OsmWay> osmWays;
-	private Set<OsmRelation> osmRelations;
+	private Map<String, OsmNode> osmNodes;
+	private Map<String, OsmWay> osmWays;
+	private Map<String, OsmRelation> osmRelations;
+
 
 	public OSM() {
-		nodes = new HashSet<>();
-		osmWays = new HashSet<>();
-		osmRelations = new HashSet<>();
+		osmNodes = new HashMap<>();
+		osmWays = new HashMap<>();
+		osmRelations = new HashMap<>();
 	}
 
-	public OSM(Set<OsmNode> nodes, Set<OsmWay> osmWays,
-	           Set<OsmRelation> osmRelations) {
-		this.nodes = nodes;
+	public OSM(Map<String, OsmNode> nodes, Map<String, OsmWay> osmWays,
+	           Map<String, OsmRelation> osmRelations) {
+		this.osmNodes = nodes;
 		this.osmWays = osmWays;
 		this.osmRelations = osmRelations;
 	}
 
-	public Set<OsmNode> getNodes() {
-		return nodes;
+	public Map<String, OsmNode> getNodes() {
+		return osmNodes;
 	}
 
-	public Set<OsmRelation> getOsmRelations() {
+	public Map<String, OsmRelation> getRelations() {
 		return osmRelations;
 	}
 
-	public Set<OsmWay> getOsmWays() {
+	public Map<String, OsmWay> getWays() {
 		return osmWays;
 	}
 
 	public OsmWay getWay(String id) {
-		for(OsmWay osmWay : osmWays) {
+		for(OsmWay osmWay : osmWays.values()) {
 			if(osmWay.id.equals(id)) {
 				return osmWay;
 			}
 		}
 		return null;
+	}
+
+	public void addNode(OsmNode osmNode) {
+		this.osmNodes.put(osmNode.id, osmNode);
+	}
+
+
+	public void addWay(OsmWay osmWay) {
+		this.osmWays.put(osmWay.id, osmWay);
+	}
+
+	public void addRelation(OsmRelation osmRelation) {
+		this.osmRelations.put(osmRelation.id, osmRelation);
 	}
 }

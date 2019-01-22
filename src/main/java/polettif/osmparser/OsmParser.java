@@ -26,8 +26,6 @@ public class OsmParser {
 		Node xmlNode;
 		NodeList xmlNodesList;
 
-		Map<String, OsmNode> nodes = new LinkedHashMap<>();
-
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = builder.parse(is);
 
@@ -40,16 +38,15 @@ public class OsmParser {
 
 			if(NodeParser.isNode(xmlNode)) {
 				OsmNode osmNode = NodeParser.parseNode(xmlNode);
-				nodes.put(osmNode.id, osmNode);
-				osm.getNodes().add(osmNode);
+				osm.addNode(osmNode);
 
 			} else if(WayParser.isWay(xmlNode)) {
-				OsmWay osmWay = WayParser.parseWay(xmlNode, nodes);
-				osm.getOsmWays().add(osmWay);
+				OsmWay osmWay = WayParser.parseWay(osm, xmlNode);
+				osm.addWay(osmWay);
 
 			} else if(RelationParser.isRelation(xmlNode)) {
 				OsmRelation osmRelation = RelationParser.parseRelation(osm, xmlNode);
-				osm.getOsmRelations().add(osmRelation);
+				osm.addRelation(osmRelation);
 
 			}
 		}
