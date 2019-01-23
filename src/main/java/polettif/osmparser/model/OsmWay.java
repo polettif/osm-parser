@@ -1,166 +1,163 @@
 package polettif.osmparser.model;
 
-import polettif.osmparser.lib.Osm;
-import polettif.osmparser.util.LatLongUtil;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.io.WKBWriter;
+import polettif.osmparser.lib.Osm;
+import polettif.osmparser.util.LatLongUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Willy Tiengo
  */
 public class OsmWay extends OsmElement implements Osm.Way {
 
-    // Constants ---------------------------------------------------------------
-    public static final String HIGHWAY = "highway";
-    //Attributes ---------------------------------------------------------------
-    public List<Osm.Node> nodes;
+	private List<Osm.Node> nodes;
 
-    public OsmWay(String id, String visible, String timestamp,
-                  String version, String changeset, String user,
-                  String uid, List<Osm.Node> nodes, Map<String, String> tags) {
+	public OsmWay(String id, String visible, String timestamp,
+	              String version, String changeset, String user,
+	              String uid, List<Osm.Node> nodes, Map<String, String> tags) {
 
-        super(id, visible, timestamp, version, changeset, user, uid, tags);
-        this.nodes = nodes;
-    }
+		super(id, visible, timestamp, version, changeset, user, uid, tags);
+		this.nodes = nodes;
+	}
 
-    public LineString getLineString() {
-        List<Coordinate> coords = new ArrayList<>();
-        GeometryFactory fac = new GeometryFactory(
-               );
+	public LineString getLineString() {
+		List<Coordinate> coords = new ArrayList<>();
+		GeometryFactory fac = new GeometryFactory(
+		);
 
-        Coordinate c1;
-        for (Osm.Node node : nodes) {
-	        OsmNode n = (OsmNode) node;
-            c1 = new Coordinate(n.lon, n.lat);
-            coords.add(c1);
-        }
+		Coordinate c1;
+		for(Osm.Node node : nodes) {
+			OsmNode n = (OsmNode) node;
+			c1 = new Coordinate(n.lon, n.lat);
+			coords.add(c1);
+		}
 
-        return fac.createLineString(coords.toArray(new Coordinate[0]));
-    }
+		return fac.createLineString(coords.toArray(new Coordinate[0]));
+	}
 
-    public boolean isHighway() {
-        return (tags.get(HIGHWAY) != null);
-    }
+	public boolean isHighway() {
+		return (tags.get("highway") != null);
+	}
 
-    public boolean isOneway() {
-        String oneway = tags.get("oneway");
+	public boolean isOneway() {
+		String oneway = tags.get("oneway");
 
-        return ((oneway != null) && oneway.equals("yes"));
+		return ((oneway != null) && oneway.equals("yes"));
 
-    }
+	}
 
-    public String getName() {
-        return tags.get("name");
-    }
+	public String getName() {
+		return tags.get("name");
+	}
 
-    public String getWayMiddle() {
-        double lenMiddle, distance, lineDistance;
-        GeometryFactory fac = new GeometryFactory();
+	public String getWayMiddle() {
+		double lenMiddle, distance, lineDistance;
+		GeometryFactory fac = new GeometryFactory();
 
-        OsmNode n1 = null, n2 = null;
+		OsmNode n1 = null, n2 = null;
 
-        lenMiddle = wayLength(nodes) / 2;
-        distance = 0d;
+		lenMiddle = wayLength(nodes) / 2;
+		distance = 0d;
 
-        for (int i = 0; i < nodes.size() - 1; i++) {
+		for(int i = 0; i < nodes.size() - 1; i++) {
 
-            n1 = (OsmNode) nodes.get(i);
-            n2 = (OsmNode) nodes.get(i + 1);
+			n1 = (OsmNode) nodes.get(i);
+			n2 = (OsmNode) nodes.get(i + 1);
 
-            lineDistance = lineDistance(n1, n2);
+			lineDistance = lineDistance(n1, n2);
 
-            if ((distance + lineDistance) > lenMiddle) {
-                distance = (lenMiddle - distance) / lineDistance;
-                break;
-            }
+			if((distance + lineDistance) > lenMiddle) {
+				distance = (lenMiddle - distance) / lineDistance;
+				break;
+			}
 
-            distance += lineDistance;
-        }
+			distance += lineDistance;
+		}
 
-        double lat = n2.lat;
-        double lon = n2.lon;
+		double lat = n2.lat;
+		double lon = n2.lon;
 
-        if (distance > 0.0d) {
-            distance = (1 / distance);
+		if(distance > 0.0d) {
+			distance = (1 / distance);
 
-            // Baseado na prova do ponto médio
-            lat = (n2.lat + (distance - 1) * n1.lat) / distance;
-            lon = (n2.lon + (distance - 1) * n1.lon) / distance;
-        }
+			// Baseado na prova do ponto médio
+			lat = (n2.lat + (distance - 1) * n1.lat) / distance;
+			lon = (n2.lon + (distance - 1) * n1.lon) / distance;
+		}
 
-        return WKBWriter.bytesToHex(
-                new WKBWriter().write(fac.createPoint(new Coordinate(lon, lat))));
-    }
+		return WKBWriter.bytesToHex(
+				new WKBWriter().write(fac.createPoint(new Coordinate(lon, lat))));
+	}
 
-    public double getWayLength() {
-        return wayLength(nodes);
-    }
+	public double getWayLength() {
+		return wayLength(nodes);
+	}
 
-    public String getHighwayType() {
-        return tags.get(HIGHWAY);
-    }
+	public String getHighwayType() {
+		return tags.get("highway");
+	}
 
-    public String getShape() throws Exception {
-        MultiLineString mls;
+	public String getShape() throws Exception {
+		MultiLineString mls;
 
-        // Precisa ser um MultiLineString
-        mls = new GeometryFactory().createMultiLineString(
-                new LineString[] { getLineString() });
+		// Precisa ser um MultiLineString
+		mls = new GeometryFactory().createMultiLineString(
+				new LineString[]{getLineString()});
 
-        return WKBWriter.bytesToHex(new WKBWriter().write(mls));
-    }
+		return WKBWriter.bytesToHex(new WKBWriter().write(mls));
+	}
 
-    public String getAltNames() {
-        return tags.get("alt_name");
-    }
-    
-    // Private methods ---------------------------------------------------------
-    private double wayLength(List<Osm.Node> nodes) {
-        double length = 0d;
-        OsmNode n1, n2;
+	public String getAltNames() {
+		return tags.get("alt_name");
+	}
 
-        n1 = (OsmNode) nodes.get(0);
+	// Private methods ---------------------------------------------------------
+	private double wayLength(List<Osm.Node> nodes) {
+		double length = 0d;
+		OsmNode n1, n2;
 
-        for (int i = 1; i < nodes.size(); i++) {
-            n2 = (OsmNode) nodes.get(i);
+		n1 = (OsmNode) nodes.get(0);
 
-            length += LatLongUtil.distance(
-                    n1.lat, n1.lon,
-                    n2.lat, n2.lon);
+		for(int i = 1; i < nodes.size(); i++) {
+			n2 = (OsmNode) nodes.get(i);
 
-            n1 = n2;
-        }
+			length += LatLongUtil.distance(
+					n1.lat, n1.lon,
+					n2.lat, n2.lon);
 
-        return length;
-    }
+			n1 = n2;
+		}
 
-    private static Double lineDistance(OsmNode n1, OsmNode n2) {
+		return length;
+	}
 
-        return LatLongUtil.distance(
-                n1.lat, n1.lon,
-                n2.lat, n2.lon);
+	private static Double lineDistance(OsmNode n1, OsmNode n2) {
 
-    }
+		return LatLongUtil.distance(
+				n1.lat, n1.lon,
+				n2.lat, n2.lon);
 
-    @Override
-    public Osm.ElementType getType() {
-        return Osm.ElementType.WAY;
-    }
+	}
 
-    @Override
-    public List<Osm.Node> getNodes() {
-        return nodes;
-    }
+	@Override
+	public Osm.ElementType getType() {
+		return Osm.ElementType.WAY;
+	}
 
-    @Override
-    public Map<Long, Osm.Relation> getRelations() {
-        return null;
-    }
+	@Override
+	public List<Osm.Node> getNodes() {
+		return nodes;
+	}
+
+	@Override
+	public Map<Long, Osm.Relation> getRelations() {
+		return null;
+	}
 }

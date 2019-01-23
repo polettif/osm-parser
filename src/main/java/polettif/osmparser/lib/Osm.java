@@ -51,14 +51,16 @@ public final class Osm {
 	}
 
 	public interface Relation extends Element {
-		List<Element> getMembers();
-
-		String getMemberRole(Element member);
+		List<Member> getMembers();
 
 		Map<Long, Relation> getRelations();
 	}
 
 	public interface Member {
 		String getRole();
+
+		ElementType getType();
+
+		Long getRef();
 	}
 }

@@ -5,7 +5,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import polettif.osmparser.lib.Osm;
 import polettif.osmparser.model.OsmData;
-import polettif.osmparser.model.OsmNode;
 import polettif.osmparser.model.OsmWay;
 
 import java.util.ArrayList;
@@ -52,16 +51,13 @@ public class WayParser {
 	private static List<Osm.Node> getNodes(NodeList children, Map<Long, Osm.Node> nodes) {
 		List<Osm.Node> result = new ArrayList<>();
 
-		Node node;
-		String nodeName;
-
 		for(int i = 0; i < children.getLength(); i++) {
 
-			node = children.item(i);
-			nodeName = node.getNodeName();
+			Node xmlNode = children.item(i);
+			String xmlNodeName = xmlNode.getNodeName();
 
-			if(nodeName.equals("nd")) {
-				String memberId = node.getAttributes().
+			if(xmlNodeName.equals("nd")) {
+				String memberId = xmlNode.getAttributes().
 						getNamedItem("ref").getNodeValue();
 				// todo getMember().getId()
 

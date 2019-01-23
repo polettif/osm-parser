@@ -5,14 +5,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import polettif.osmparser.lib.Osm;
 import polettif.osmparser.model.OsmData;
-import polettif.osmparser.model.OsmNode;
-import polettif.osmparser.model.OsmRelation;
-import polettif.osmparser.model.OsmWay;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Willy Tiengo
@@ -51,11 +49,6 @@ public class OsmParser {
 
 			}
 		}
-
-//		Set<OsmNode> nodeset = new HashSet<>();
-//		for(String n : nodes.keySet()) {
-//			nodeset.add(nodes.get(n));
-//		}
 
 		return osm;
 	}

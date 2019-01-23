@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public abstract class OsmElement implements Osm.Element {
 
-	public Long id;
+	private final Long id;
 	public String visible;
 	public String timestamp;
 	public String version;
@@ -56,7 +56,7 @@ public abstract class OsmElement implements Osm.Element {
 
 		final OsmNode other = (OsmNode) obj;
 
-		return (id != null && id.equals(other.id));
+		return (id != null && id.equals(other.getId()));
 
 	}
 
