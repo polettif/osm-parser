@@ -60,4 +60,17 @@ public class OsmData {
 	public void addRelation(Osm.Relation osmRelation) {
 		this.osmRelations.put(osmRelation.getId(), osmRelation);
 	}
+
+	public Osm.Element getElement(Osm.ElementType type, Long refId) {
+		switch(type) {
+			case WAY:
+				return this.osmWays.get(refId);
+			case NODE:
+				return this.osmNodes.get(refId);
+			case RELATION:
+				return this.osmNodes.get(refId);
+			default:
+				throw new IllegalAccessError();
+		}
+	}
 }

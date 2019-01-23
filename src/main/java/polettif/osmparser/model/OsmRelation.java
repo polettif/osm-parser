@@ -42,8 +42,8 @@ public class OsmRelation extends OsmElement implements Osm.Relation {
 		List<Coordinate> lines = new ArrayList<>();
 
 		for(Osm.Member osmMember : osmMembers) {
-			if(osmMember.getType().equals(Osm.ElementType.WAY)) {
-				osmWay = (OsmWay) osm.getWay(osmMember.getRef());
+			if(osmMember.getElement().getType().equals(Osm.ElementType.WAY)) {
+				osmWay = (OsmWay) osmMember.getElement();
 
 				if(osmWay == null) {
 					return null;

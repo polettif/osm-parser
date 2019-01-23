@@ -5,6 +5,8 @@ import org.w3c.dom.Node;
 import polettif.osmparser.lib.Osm;
 import polettif.osmparser.model.OsmNode;
 
+import java.util.Objects;
+
 /**
  * @author zuq
  */
@@ -19,18 +21,17 @@ public class NodeParser {
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
-		Osm.Node osmNode = new OsmNode(id,
+		return new OsmNode(
+				Long.parseLong(id),
+				Double.parseDouble(Objects.requireNonNull(getAttribute(atts, "lon"))),
+				Double.parseDouble(Objects.requireNonNull(getAttribute(atts, "lat"))),
 				getAttribute(atts, "visible"),
 				getAttribute(atts, "timestamp"),
 				getAttribute(atts, "version"),
 				getAttribute(atts, "changeset"),
 				getAttribute(atts, "user"),
 				getAttribute(atts, "uid"),
-				getAttribute(atts, "lat"),
-				getAttribute(atts, "lon"),
 				OsmParser.parseTags(xmlNodeNode.getChildNodes()));
-
-		return osmNode;
 	}
 
 	// Private Methods ---------------------------------------------------------

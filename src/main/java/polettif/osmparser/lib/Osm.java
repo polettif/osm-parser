@@ -59,8 +59,6 @@ public final class Osm {
 	public interface Member {
 		String getRole();
 
-		ElementType getType();
-
-		Long getRef();
+		Element getElement();
 	}
 }

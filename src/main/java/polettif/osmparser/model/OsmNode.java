@@ -15,12 +15,12 @@ public class OsmNode extends OsmElement implements Osm.Node {
 
 	public double lat;
 	public double lon;
-	public Coordinate coordinate;
+	private Coordinate coordinate;
 
-	public OsmNode(String id, String visible, String timestamp, String version, String changeset, String user, String uid, String lat, String lon, Map<String, String> tags) {
+	public OsmNode(long id, double lon, double lat, String visible, String timestamp, String version, String changeset, String user, String uid, Map<String, String> tags) {
 		super(id, visible, timestamp, version, changeset, user, uid, tags);
-		this.lat = Double.parseDouble(lat);
-		this.lon = Double.parseDouble(lon);
+		this.lat = lat;
+		this.lon = lon;
 		this.tags = tags;
 		this.coordinate = new Coordinate(this.lon, this.lat);
 	}

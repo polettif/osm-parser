@@ -26,7 +26,7 @@ public class RelationParser {
 		String id = atts.getNamedItem("id").getNodeValue();
 
 		// create member list
-		List<Osm.Member> members = getMembers(xmlNodeRelation.getChildNodes());
+		List<Osm.Member> members = getMembers(osm, xmlNodeRelation.getChildNodes());
 
 		return new OsmRelation(osm, id,
 				getAttribute(atts, "visible"),
@@ -47,7 +47,7 @@ public class RelationParser {
 		return (node == null) ? null : node.getNodeValue();
 	}
 
-	private static List<Osm.Member> getMembers(NodeList children) {
+	private static List<Osm.Member> getMembers(OsmData osm, NodeList children) {
 		List<Osm.Member> members = new ArrayList<>();
 
 		for(int i = 0; i < children.getLength(); i++) {
@@ -55,11 +55,13 @@ public class RelationParser {
 			NamedNodeMap map = node.getAttributes();
 
 			if(node.getNodeName().equals("member")) {
-				members.add(new OsmMember(
-						map.getNamedItem("type").getNodeValue(),
-						map.getNamedItem("ref").getNodeValue(),
-						map.getNamedItem("role").getNodeValue())
-				);
+				Long refId = Long.parseLong(map.getNamedItem("ref").getNodeValue());
+				Osm.ElementType type = Osm.ElementType.valueOf(map.getNamedItem("type").getNodeValue().toUpperCase());
+				String role = map.getNamedItem("role").getNodeValue();
+
+				Osm.Member member = new OsmMember(osm.getElement(type, refId), role);
+
+				members.add(member);
 			}
 		}
 

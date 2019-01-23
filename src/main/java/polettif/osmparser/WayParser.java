@@ -21,13 +21,25 @@ public class WayParser {
 	}
 
 	public static OsmWay parseWay(OsmData osm, Node xmlNodeWay) {
-		OsmWay osmWay;
-
 		NamedNodeMap atts = xmlNodeWay.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
-		osmWay = new OsmWay(
+		List<Osm.Node> memberNodes = new ArrayList<>();
+		NodeList children = xmlNodeWay.getChildNodes();
+		for(int i = 0; i < children.getLength(); i++) {
+			Node xmlNode = children.item(i);
+			String xmlNodeName = xmlNode.getNodeName();
+
+			if(xmlNodeName.equals("nd")) {
+				Long nodeId = Long.parseLong(xmlNode.getAttributes().
+						getNamedItem("ref").getNodeValue());
+
+				memberNodes.add(osm.getNodes().get(nodeId));
+			}
+		}
+
+		return new OsmWay(
 				id,
 				getAttribute(atts, "visible"),
 				getAttribute(atts, "timestamp"),
@@ -35,36 +47,13 @@ public class WayParser {
 				getAttribute(atts, "changeset"),
 				getAttribute(atts, "user"),
 				getAttribute(atts, "uid"),
-				getNodes(xmlNodeWay.getChildNodes(), osm.getNodes()),
+				memberNodes,
 				OsmParser.parseTags(xmlNodeWay.getChildNodes()));
-
-		return osmWay;
 	}
-
-	// Private Methods ---------------------------------------------------------
 
 	private static String getAttribute(NamedNodeMap atts, String key) {
 		Node node = atts.getNamedItem(key);
 		return (node == null) ? null : node.getNodeValue();
 	}
 
-	private static List<Osm.Node> getNodes(NodeList children, Map<Long, Osm.Node> nodes) {
-		List<Osm.Node> result = new ArrayList<>();
-
-		for(int i = 0; i < children.getLength(); i++) {
-
-			Node xmlNode = children.item(i);
-			String xmlNodeName = xmlNode.getNodeName();
-
-			if(xmlNodeName.equals("nd")) {
-				String memberId = xmlNode.getAttributes().
-						getNamedItem("ref").getNodeValue();
-				// todo getMember().getId()
-
-				result.add(nodes.get(memberId));
-			}
-		}
-
-		return result;
-	}
 }

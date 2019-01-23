@@ -7,19 +7,12 @@ import polettif.osmparser.lib.Osm;
  */
 public class OsmMember implements Osm.Member {
 
-	private Osm.ElementType type;
-	private Long ref;
+	private Osm.Element element;
 	private String role;
 
-	public OsmMember(String type, String ref, String role) {
-		this.type = Osm.ElementType.valueOf(type.toUpperCase());
-		this.ref = Long.valueOf(ref);
+	public OsmMember(Osm.Element element, String role) {
+		this.element = element;
 		this.role = role;
-	}
-
-	@Override
-	public Osm.ElementType getType() {
-		return type;
 	}
 
 	@Override
@@ -28,7 +21,7 @@ public class OsmMember implements Osm.Member {
 	}
 
 	@Override
-	public Long getRef() {
-		return ref;
+	public Osm.Element getElement() {
+		return element;
 	}
 }

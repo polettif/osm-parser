@@ -143,7 +143,6 @@ public class OsmWay extends OsmElement implements Osm.Way {
 		return LatLongUtil.distance(
 				n1.lat, n1.lon,
 				n2.lat, n2.lon);
-
 	}
 
 	@Override
