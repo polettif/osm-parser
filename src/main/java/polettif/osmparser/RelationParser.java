@@ -3,7 +3,8 @@ package polettif.osmparser;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.model.OSM;
+import polettif.osmparser.lib.Osm;
+import polettif.osmparser.model.OsmData;
 import polettif.osmparser.model.OsmMember;
 import polettif.osmparser.model.OsmRelation;
 
@@ -19,7 +20,7 @@ public class RelationParser {
 		return node.getNodeName().equals("relation");
 	}
 
-	public static OsmRelation parseRelation(OSM osm, Node xmlNodeRelation) {
+	public static Osm.Relation parseRelation(OsmData osm, Node xmlNodeRelation) {
 		NamedNodeMap atts = xmlNodeRelation.getAttributes();
 
 		String strId = atts.getNamedItem("id").getNodeValue();

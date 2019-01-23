@@ -3,7 +3,8 @@ package polettif.osmparser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.model.OSM;
+import polettif.osmparser.lib.Osm;
+import polettif.osmparser.model.OsmData;
 import polettif.osmparser.model.OsmNode;
 import polettif.osmparser.model.OsmRelation;
 import polettif.osmparser.model.OsmWay;
@@ -21,7 +22,7 @@ public class OsmParser {
 	/**
 	 *
 	 */
-	public static OSM parse(InputStream is) throws Exception {
+	public static OsmData parse(InputStream is) throws Exception {
 
 		Node xmlNode;
 		NodeList xmlNodesList;
@@ -31,21 +32,21 @@ public class OsmParser {
 
 		xmlNodesList = doc.getChildNodes().item(0).getChildNodes();
 
-		OSM osm = new OSM();
+		OsmData osm = new OsmData();
 		for(int i = 0; i < xmlNodesList.getLength(); i++) {
 
 			xmlNode = xmlNodesList.item(i);
 
 			if(NodeParser.isNode(xmlNode)) {
-				OsmNode osmNode = NodeParser.parseNode(xmlNode);
+				Osm.Node osmNode = NodeParser.parseNode(xmlNode);
 				osm.addNode(osmNode);
 
 			} else if(WayParser.isWay(xmlNode)) {
-				OsmWay osmWay = WayParser.parseWay(osm, xmlNode);
+				Osm.Way osmWay = WayParser.parseWay(osm, xmlNode);
 				osm.addWay(osmWay);
 
 			} else if(RelationParser.isRelation(xmlNode)) {
-				OsmRelation osmRelation = RelationParser.parseRelation(osm, xmlNode);
+				Osm.Relation osmRelation = RelationParser.parseRelation(osm, xmlNode);
 				osm.addRelation(osmRelation);
 
 			}

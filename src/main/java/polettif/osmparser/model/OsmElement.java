@@ -1,11 +1,13 @@
 package polettif.osmparser.model;
 
+import polettif.osmparser.lib.Osm;
+
 import java.util.Map;
 
 /**
  * @author Willy Tiengo
  */
-public class OsmElement {
+public abstract class OsmElement implements Osm.Element {
 
 	public Long id;
 	public String visible;
@@ -63,7 +65,18 @@ public class OsmElement {
 		return (id != null ? id.hashCode() : super.hashCode());
 	}
 
-	public Map<String, String> getAllTags() {
+	@Override
+	public Map<String, String> getTags() {
 		return tags;
+	}
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public String getValue(String key) {
+		return null;
 	}
 }

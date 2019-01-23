@@ -4,6 +4,8 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.WKBWriter;
+import polettif.osmparser.lib.Osm;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,12 +16,12 @@ import java.util.Map;
  *
  * @author Willy Tiengo
  */
-public class OsmRelation extends OsmElement {
+public class OsmRelation extends OsmElement implements Osm.Relation {
 
-    private OSM osm;
+    private OsmData osm;
     public List<OsmMember> osmMembers;
 
-    public OsmRelation(OSM osm, Long id, String visible, String timestamp,
+    public OsmRelation(OsmData osm, Long id, String visible, String timestamp,
                        String version, String changeset, String user,
                        String uid, List<OsmMember> osmMembers, Map<String, String> tags) {
 
@@ -27,6 +29,11 @@ public class OsmRelation extends OsmElement {
         this.osm = osm;
         this.osmMembers = osmMembers;
     }
+
+	@Override
+	public Osm.ElementType getType() {
+		return Osm.ElementType.RELATION;
+	}
 
     /**
      * @return The MultiLineString of all ways osmMembers of this relation. If any
@@ -39,7 +46,7 @@ public class OsmRelation extends OsmElement {
 
         for (OsmMember osmMember : osmMembers) {
             if (isWay(osmMember)) {
-                osmWay = osm.getWay(osmMember.ref);
+                osmWay = (OsmWay) osm.getWay(osmMember.ref);
 
                 if (osmWay == null) {
                     return null;
@@ -99,4 +106,19 @@ public class OsmRelation extends OsmElement {
     private boolean isWay(OsmMember m) {
         return m.type.equals("way");
     }
+
+	@Override
+	public List<Osm.Element> getMembers() {
+		throw new IllegalAccessError();
+    }
+
+	@Override
+	public String getMemberRole(Osm.Element member) {
+		throw new IllegalAccessError();
+	}
+
+	@Override
+	public Map<Long, Osm.Relation> getRelations() {
+		throw new IllegalAccessError();
+	}
 }

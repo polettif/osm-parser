@@ -3,7 +3,8 @@ package polettif.osmparser;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.model.OSM;
+import polettif.osmparser.lib.Osm;
+import polettif.osmparser.model.OsmData;
 import polettif.osmparser.model.OsmNode;
 import polettif.osmparser.model.OsmWay;
 
@@ -20,7 +21,7 @@ public class WayParser {
 		return node.getNodeName().equals("way");
 	}
 
-	public static OsmWay parseWay(OSM osm, Node xmlNodeWay) {
+	public static OsmWay parseWay(OsmData osm, Node xmlNodeWay) {
 		OsmWay osmWay;
 
 		NamedNodeMap atts = xmlNodeWay.getAttributes();
@@ -48,8 +49,8 @@ public class WayParser {
 		return (node == null) ? null : node.getNodeValue();
 	}
 
-	private static List<OsmNode> getNodes(NodeList children, Map<Long, OsmNode> nodes) {
-		List<OsmNode> result = new ArrayList<>();
+	private static List<Osm.Node> getNodes(NodeList children, Map<Long, Osm.Node> nodes) {
+		List<Osm.Node> result = new ArrayList<>();
 
 		Node node;
 		String nodeName;
@@ -62,8 +63,9 @@ public class WayParser {
 			if(nodeName.equals("nd")) {
 				String memberId = node.getAttributes().
 						getNamedItem("ref").getNodeValue();
+				// todo getMember().getId()
 
-				result.add(nodes.get(Long.valueOf(memberId)));
+				result.add(nodes.get(memberId));
 			}
 		}
 

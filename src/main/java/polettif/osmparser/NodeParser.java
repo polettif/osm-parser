@@ -2,6 +2,7 @@ package polettif.osmparser;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import polettif.osmparser.lib.Osm;
 import polettif.osmparser.model.OsmNode;
 
 /**
@@ -13,12 +14,12 @@ public class NodeParser {
 		return (node.getNodeName().equals("node"));
 	}
 
-	public static OsmNode parseNode(Node xmlNodeNode) {
+	public static Osm.Node parseNode(Node xmlNodeNode) {
 		NamedNodeMap atts = xmlNodeNode.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
-		OsmNode osmNode = new OsmNode(id,
+		Osm.Node osmNode = new OsmNode(id,
 				getAttribute(atts, "visible"),
 				getAttribute(atts, "timestamp"),
 				getAttribute(atts, "version"),
