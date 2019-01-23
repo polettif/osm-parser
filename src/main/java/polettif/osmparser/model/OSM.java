@@ -51,7 +51,6 @@ public class OSM {
 		this.osmNodes.put(osmNode.id, osmNode);
 	}
 
-
 	public void addWay(OsmWay osmWay) {
 		this.osmWays.put(osmWay.id, osmWay);
 	}
