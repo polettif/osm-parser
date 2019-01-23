@@ -13,21 +13,9 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    <groupId>org.imintel</groupId>
+    <groupId>com.github.polettif</groupId>
     <artifactId>osm-parser</artifactId>
-    <version>1.0-MF</version>
-    <distributionManagement>
-        <repository>
-            <id>bintray-ckcook-maven-osm-parser</id>
-            <name>ckcook-maven-osm-parser</name>
-            <url>https://api.bintray.com/maven/ckcook/maven/osm-parser</url>
-        </repository>
-    </distributionManagement>
-    <scm>
-        <connection>scm:git:git@github.com:imintel/osm-parser.git</connection>
-        <url>scm:git:git@github.com:imintel/osm-parser.git</url>
-        <developerConnection>scm:git:git@github.com:imintel/osm-parser.git</developerConnection>
-    </scm>
+    <version>1.1-SNAPSHOT</version>
     <developers>
         <developer>
             <id>cam.cook</id>
@@ -44,6 +32,13 @@
                 <role>developer</role>
             </roles>
         </developer>
+	    <developer>
+		    <id>polettif</id>
+		    <name>Flavio Poletti</name>
+		    <roles>
+			    <role>developer</role>
+		    </roles>
+	    </developer>
     </developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,7 +61,6 @@
             <version>1.8.1</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
