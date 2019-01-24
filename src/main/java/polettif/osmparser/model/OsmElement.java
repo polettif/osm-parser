@@ -75,8 +75,4 @@ public abstract class OsmElement implements Osm.Element {
 		return id;
 	}
 
-	@Override
-	public String getValue(String key) {
-		return null;
-	}
 }

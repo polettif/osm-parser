@@ -1,8 +1,12 @@
 package polettif.osmparser.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
-import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.index.quadtree.Quadtree;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
@@ -17,10 +21,14 @@ import java.util.Map;
  */
 public class OsmData {
 
+	private static final Logger log = LogManager.getLogger( OsmData.class.getName() );
+
 	private Map<Long, Osm.Node> nodes;
 	private Map<Long, Osm.Way> ways;
 	private Map<Long, Osm.Relation> relations;
 	private CoordinateReferenceSystem coordinateReferenceSystem;
+	private Quadtree quadtree;
+
 
 	public OsmData() {
 		nodes = new HashMap<>();
@@ -37,17 +45,20 @@ public class OsmData {
 
 	public void transform(String targetEPSG) throws FactoryException {
 		CoordinateReferenceSystem targetCRS = CRS.decode(targetEPSG, true);
+		this.quadtree = new Quadtree();
 
 		MathTransform mathTransform = CRS.findMathTransform(coordinateReferenceSystem, targetCRS, true);
 
 		for(Osm.Node node : nodes.values()) {
-			Coordinate newCoord;
+			Point newPoint;
 			try {
-				newCoord = JTS.transform(node.getCoord(), null, mathTransform);
+				newPoint = (Point) JTS.transform(node.getPoint(), mathTransform);
 			} catch (TransformException e) {
 				throw new RuntimeException(e);
 			}
-			node.setCoord(newCoord);
+
+			node.setPoint(newPoint);
+			quadtree.insert(new Envelope(newPoint.getCoordinate()), node);
 		}
 
 		coordinateReferenceSystem = targetCRS;
@@ -64,6 +75,13 @@ public class OsmData {
 			default:
 				throw new IllegalAccessError();
 		}
+	}
+
+	public Quadtree getQuadtree() {
+		if(quadtree == null) {
+			log.warn("OSM is not transformed to projected coordinate System");
+		}
+		return quadtree;
 	}
 
 	public Map<Long, Osm.Node> getNodes() {

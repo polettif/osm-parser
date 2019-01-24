@@ -1,6 +1,6 @@
 package polettif.osmparser.lib;
 
-import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Point;
 
 import java.util.List;
 import java.util.Map;
@@ -32,20 +32,18 @@ public final class Osm {
 		ElementType getType();
 
 		Map<String, String> getTags();
-
-		String getValue(String key);
 	}
 
 	public interface Node extends Element {
-		Coordinate getCoord();
+		Point getPoint();
+
+		void setPoint(Point newPoint);
 
 		double[] getLonLat();
 
 		Map<Long, Way> getContainingWays();
 
 		Map<Long, Relation> getContainingRelations();
-
-		void setCoord(Coordinate coordinate);
 	}
 
 	public interface Way extends Element {
