@@ -1,5 +1,7 @@
 package polettif.osmparser.util;
 
+import polettif.osmparser.model.OsmNode;
+
 public class LatLongUtil {
 
     public static double distance(double lat1, double lon1,
@@ -39,5 +41,9 @@ public class LatLongUtil {
         }
 
         return angle;
+    }
+
+    public static double distance(OsmNode n1, OsmNode n2) {
+        return distance(n1.getLonLat()[0], n1.getLonLat()[1], n2.getLonLat()[0], n2.getLonLat()[1]);
     }
 }
