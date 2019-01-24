@@ -1,7 +1,5 @@
 package polettif.osmparser.model;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Envelope;
@@ -19,16 +17,16 @@ import java.util.Map;
 /**
  * @author Willy Tiengo
  */
-public class OsmData {
+public class OsmData implements Osm {
 
-	private static final Logger log = LogManager.getLogger( OsmData.class.getName() );
+//	private static final Logger log = LogManager.getLogger( OsmData.class.getName() );
 
 	private Map<Long, Osm.Node> nodes;
 	private Map<Long, Osm.Way> ways;
 	private Map<Long, Osm.Relation> relations;
+
 	private CoordinateReferenceSystem coordinateReferenceSystem;
 	private Quadtree quadtree;
-
 
 	public OsmData() {
 		nodes = new HashMap<>();
@@ -77,23 +75,11 @@ public class OsmData {
 		}
 	}
 
-	public Quadtree getQuadtree() {
+	public Quadtree getNodeQuadtree() {
 		if(quadtree == null) {
-			log.warn("OSM is not transformed to projected coordinate System");
+			System.out.println("OSM is not transformed to projected coordinate System");
 		}
 		return quadtree;
-	}
-
-	public Map<Long, Osm.Node> getNodes() {
-		return nodes;
-	}
-
-	public Map<Long, Osm.Way> getWays() {
-		return ways;
-	}
-
-	public Map<Long, Osm.Relation> getRelations() {
-		return relations;
 	}
 
 	public void addNode(Osm.Node osmNode) {
@@ -106,5 +92,33 @@ public class OsmData {
 
 	public void addRelation(Osm.Relation osmRelation) {
 		this.relations.put(osmRelation.getId(), osmRelation);
+	}
+
+	public void updateContainers() {
+		for(Relation relation : relations.values()) {
+			for(Member member : relation.getMembers()) {
+				member.getElement().addContainingElement(relation);
+			}
+		}
+		for(Way way : ways.values()) {
+			for(Node node : way.getNodes()) {
+				node.addContainingElement(way);
+			}
+		}
+	}
+
+	@Override
+	public Map<Long, Osm.Node> getNodes() {
+		return nodes;
+	}
+
+	@Override
+	public Map<Long, Osm.Way> getWays() {
+		return ways;
+	}
+
+	@Override
+	public Map<Long, Osm.Relation> getRelations() {
+		return relations;
 	}
 }

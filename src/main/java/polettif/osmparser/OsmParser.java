@@ -46,25 +46,22 @@ public class OsmParser {
 			} else if(RelationParser.isRelation(xmlNode)) {
 				Osm.Relation osmRelation = RelationParser.parseRelation(osm, xmlNode);
 				osm.addRelation(osmRelation);
-
 			}
 		}
+
+		osm.updateContainers();
 
 		return osm;
 	}
 
-	protected static Map<String, String> parseTags(NodeList nodes) {
+	static Map<String, String> parseTags(NodeList nodes) {
 
 		Map<String, String> tags = new HashMap<>();
 
 		for(int i = 0; i < nodes.getLength(); i++) {
-
-			Node node = nodes.item(i);
-
-			if(node.getNodeName().equals("tag")) {
-
-				addTag(tags, node);
-
+			Node xmlNode = nodes.item(i);
+			if(xmlNode.getNodeName().equals("tag")) {
+				addTag(tags, xmlNode);
 			}
 		}
 
@@ -76,13 +73,9 @@ public class OsmParser {
 		String value = node.getAttributes().getNamedItem("v").getNodeValue();
 
 		if(tags.get(key) != null) {
-
 			tags.put(key, tags.get(key) + ";" + value);
-
 		} else {
-
 			tags.put(key, value);
-
 		}
 	}
 }

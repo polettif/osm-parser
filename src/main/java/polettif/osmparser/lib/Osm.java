@@ -1,6 +1,7 @@
 package polettif.osmparser.lib;
 
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.index.quadtree.Quadtree;
 
 import java.util.List;
 import java.util.Map;
@@ -8,9 +9,19 @@ import java.util.Map;
 /**
  * @author polettif
  */
-public final class Osm {
+public interface Osm {
 
-	public enum ElementType {
+	Osm.Element getElement(Osm.ElementType type, Long refId);
+
+	Map<Long, Osm.Node> getNodes();
+
+	Map<Long, Osm.Way> getWays();
+
+	Map<Long, Osm.Relation> getRelations();
+
+	Quadtree getNodeQuadtree();
+
+	enum ElementType {
 		NODE("node"),
 		WAY("way"),
 		RELATION("relation");
@@ -21,20 +32,30 @@ public final class Osm {
 			this.name = name;
 		}
 
+		public static ElementType get(String str) {
+			return ElementType.valueOf(str.toUpperCase());
+		}
+
 		public String toString() {
 			return name;
 		}
 	}
 
-	public interface Element {
+	interface Element {
 		Long getId();
 
 		ElementType getType();
 
 		Map<String, String> getTags();
+
+		void addContainingElement(Element parentElement);
+
+		Map<Long, Relation> getContainingRelations();
+
+		void update(Osm osm);
 	}
 
-	public interface Node extends Element {
+	interface Node extends Element {
 		Point getPoint();
 
 		void setPoint(Point newPoint);
@@ -42,24 +63,23 @@ public final class Osm {
 		double[] getLonLat();
 
 		Map<Long, Way> getContainingWays();
-
-		Map<Long, Relation> getContainingRelations();
 	}
 
-	public interface Way extends Element {
+	interface Way extends Element {
 		List<Node> getNodes();
 
-		Map<Long, Relation> getRelations();
 	}
 
-	public interface Relation extends Element {
+	interface Relation extends Element {
 		List<Member> getMembers();
-
-		Map<Long, Relation> getRelations();
 	}
 
-	public interface Member {
+	interface Member {
 		String getRole();
+
+		String geType();
+
+		String getRefId();
 
 		Element getElement();
 	}

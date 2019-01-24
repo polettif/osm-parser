@@ -1,46 +1,50 @@
 package polettif.osmparser.model;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Polygon;
 import polettif.osmparser.lib.Osm;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Willy Tiengo
  */
 public class OsmRelation extends OsmElement implements Osm.Relation {
 
-	private final List<Osm.Member> osmMembers;
+	private List<Osm.Member> members;
 
-	@Deprecated
-	private OsmData osm;
+	private Map<Long, Osm.Relation> containingRelations = new HashMap<>();
 
-	public OsmRelation(OsmData osm, String id, String visible, String timestamp,
+	public OsmRelation(String id, String visible, String timestamp,
 	                   String version, String changeset, String user,
-	                   String uid, List<Osm.Member> osmMembers, Map<String, String> tags) {
+	                   String uid, List<Osm.Member> members, Map<String, String> tags) {
 
-		super(id, visible, timestamp, version, changeset, user, uid, tags);
-		this.osmMembers = osmMembers;
-	}
-
-	@Override
-	public Osm.ElementType getType() {
-		return Osm.ElementType.RELATION;
-	}
-
-	public String getName() {
-		return tags.get("name");
+		super(Osm.ElementType.RELATION, id, visible, timestamp, version, changeset, user, uid, tags);
+		this.members = members;
 	}
 
 	@Override
 	public List<Osm.Member> getMembers() {
-		throw new IllegalAccessError();
+		return members;
 	}
 
 	@Override
-	public Map<Long, Osm.Relation> getRelations() {
-		throw new IllegalAccessError();
+	public void addContainingElement(Osm.Element parentElement) {
+		if(parentElement.getType().equals(Osm.ElementType.RELATION)){
+			containingRelations.put(parentElement.getId(), (Osm.Relation) parentElement);
+		} else {
+			throw new RuntimeException("Can't add element type " + parentElement.getType());
+		}
 	}
+
+	@Override
+	public Map<Long, Osm.Relation> getContainingRelations() {
+		return containingRelations;
+	}
+
+	@Override
+	public void update(Osm osm) {
+
+	}
+
 }

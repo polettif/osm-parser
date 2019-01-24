@@ -22,7 +22,7 @@ public class NodeParser {
 		String id = atts.getNamedItem("id").getNodeValue();
 
 		return new OsmNode(
-				Long.parseLong(id),
+				id,
 				Double.parseDouble(Objects.requireNonNull(getAttribute(atts, "lon"))),
 				Double.parseDouble(Objects.requireNonNull(getAttribute(atts, "lat"))),
 				getAttribute(atts, "visible"),

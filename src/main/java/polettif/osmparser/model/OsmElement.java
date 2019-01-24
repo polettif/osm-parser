@@ -10,19 +10,21 @@ import java.util.Map;
 public abstract class OsmElement implements Osm.Element {
 
 	private final Long id;
+	private final Osm.ElementType type;
 	public String visible;
 	public String timestamp;
 	public String version;
 	public String changeset;
 	public String user;
 	public String uid;
-	public Map<String, String> tags;
+	private Map<String, String> tags;
 
-	public OsmElement(String id, String visible, String timestamp,
+	public OsmElement(Osm.ElementType type, String id, String visible, String timestamp,
 	                  String version, String changeset, String user, String uid,
 	                  Map<String, String> tags) {
 
 		this.id = Long.valueOf(id);
+		this.type = type;
 		this.visible = visible;
 		this.timestamp = timestamp;
 		this.version = version;
@@ -32,10 +34,11 @@ public abstract class OsmElement implements Osm.Element {
 		this.tags = tags;
 	}
 
-	public OsmElement(long id, String visible, String timestamp,
+	public OsmElement(Osm.ElementType type, long id, String visible, String timestamp,
 	                  String version, String changeset, String user, String uid,
 	                  Map<String, String> tags) {
 		this.id = id;
+		this.type = type;
 		this.visible = visible;
 		this.timestamp = timestamp;
 		this.version = version;
@@ -43,26 +46,6 @@ public abstract class OsmElement implements Osm.Element {
 		this.user = user;
 		this.uid = uid;
 		this.tags = tags;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == null) {
-			return false;
-		}
-		if(getClass() != obj.getClass()) {
-			return false;
-		}
-
-		final OsmNode other = (OsmNode) obj;
-
-		return (id != null && id.equals(other.getId()));
-
-	}
-
-	@Override
-	public int hashCode() {
-		return (id != null ? id.hashCode() : super.hashCode());
 	}
 
 	@Override
@@ -74,5 +57,11 @@ public abstract class OsmElement implements Osm.Element {
 	public Long getId() {
 		return id;
 	}
+
+	@Override
+	public Osm.ElementType getType() {
+		return type;
+	}
+
 
 }

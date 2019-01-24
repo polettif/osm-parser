@@ -1,12 +1,9 @@
 package polettif.osmparser.model;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
 import polettif.osmparser.lib.Osm;
-import polettif.osmparser.util.LatLongUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,30 +12,16 @@ import java.util.Map;
  */
 public class OsmWay extends OsmElement implements Osm.Way {
 
-	private List<Osm.Node> nodes;
+	private List<Long> nodeIds;
+	private List<Osm.Node> nodes = new ArrayList<>();
+
+	private Map<Long, Osm.Relation> containingRelations = new HashMap<>();
 
 	public OsmWay(String id, String visible, String timestamp,
 	              String version, String changeset, String user,
-	              String uid, List<Osm.Node> nodes, Map<String, String> tags) {
-
-		super(id, visible, timestamp, version, changeset, user, uid, tags);
-		this.nodes = nodes;
-	}
-
-	public boolean isOneway() {
-		String oneway = tags.get("oneway");
-
-		return ((oneway != null) && oneway.equals("yes"));
-
-	}
-
-	public String getName() {
-		return tags.get("name");
-	}
-
-	@Override
-	public Osm.ElementType getType() {
-		return Osm.ElementType.WAY;
+	              String uid, List<Long> nodeIds, Map<String, String> tags) {
+		super(Osm.ElementType.WAY, id, visible, timestamp, version, changeset, user, uid, tags);
+		this.nodeIds = nodeIds;
 	}
 
 	@Override
@@ -47,7 +30,23 @@ public class OsmWay extends OsmElement implements Osm.Way {
 	}
 
 	@Override
-	public Map<Long, Osm.Relation> getRelations() {
-		return null;
+	public void update(Osm osm) {
+		for(Long nodeId : nodeIds) {
+			this.nodes.add(osm.getNodes().get(nodeId));
+		}
+	}
+
+	@Override
+	public void addContainingElement(Osm.Element parentElement) {
+		if(parentElement.getType().equals(Osm.ElementType.RELATION)){
+			containingRelations.put(parentElement.getId(), (Osm.Relation) parentElement);
+		} else {
+			throw new RuntimeException("Can't add element type " + parentElement.getType());
+		}
+	}
+
+	@Override
+	public Map<Long, Osm.Relation> getContainingRelations() {
+		return containingRelations;
 	}
 }

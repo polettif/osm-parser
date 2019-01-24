@@ -41,15 +41,15 @@ public class OsmUtils {
 			distance += lineDistance;
 		}
 
-		double lat = n2.lat;
-		double lon = n2.lon;
+		double lat = n2.getLonLat()[1];
+		double lon = n2.getLonLat()[0];
 
 		if(distance > 0.0d) {
 			distance = (1 / distance);
 
 			// Baseado na prova do ponto médio
-			lat = (n2.lat + (distance - 1) * n1.lat) / distance;
-			lon = (n2.lon + (distance - 1) * n1.lon) / distance;
+			lat = (n2.getLonLat()[1] + (distance - 1) * n1.getLonLat()[1]) / distance;
+			lon = (n2.getLonLat()[0] + (distance - 1) * n1.getLonLat()[0]) / distance;
 		}
 
 		return WKBWriter.bytesToHex(
@@ -76,8 +76,8 @@ public class OsmUtils {
 			n2 = (OsmNode) nodes.get(i);
 
 			length += LatLongUtil.distance(
-					n1.lat, n1.lon,
-					n2.lat, n2.lon);
+					n1.getLonLat()[1], n1.getLonLat()[0],
+					n2.getLonLat()[1], n2.getLonLat()[0]);
 
 			n1 = n2;
 		}
