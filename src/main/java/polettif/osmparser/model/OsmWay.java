@@ -1,10 +1,8 @@
 package polettif.osmparser.model;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.io.WKBWriter;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
 import polettif.osmparser.lib.Osm;
 import polettif.osmparser.util.LatLongUtil;
 
@@ -35,7 +33,7 @@ public class OsmWay extends OsmElement implements Osm.Way {
 		Coordinate c1;
 		for(Osm.Node node : nodes) {
 			OsmNode n = (OsmNode) node;
-			c1 = new Coordinate(n.lon, n.lat);
+			c1 = new Coordinate(n.getLonLat()[1], n.getLonLat()[2]);
 			coords.add(c1);
 		}
 
@@ -57,6 +55,7 @@ public class OsmWay extends OsmElement implements Osm.Way {
 		return tags.get("name");
 	}
 
+	/*
 	public String getWayMiddle() {
 		double lenMiddle, distance, lineDistance;
 		GeometryFactory fac = new GeometryFactory();
@@ -95,6 +94,7 @@ public class OsmWay extends OsmElement implements Osm.Way {
 		return WKBWriter.bytesToHex(
 				new WKBWriter().write(fac.createPoint(new Coordinate(lon, lat))));
 	}
+	*/
 
 	public double getWayLength() {
 		return wayLength(nodes);
@@ -104,6 +104,7 @@ public class OsmWay extends OsmElement implements Osm.Way {
 		return tags.get("highway");
 	}
 
+	/*
 	public String getShape() throws Exception {
 		MultiLineString mls;
 
@@ -113,6 +114,7 @@ public class OsmWay extends OsmElement implements Osm.Way {
 
 		return WKBWriter.bytesToHex(new WKBWriter().write(mls));
 	}
+	*/
 
 	public String getAltNames() {
 		return tags.get("alt_name");

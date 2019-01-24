@@ -1,5 +1,12 @@
 package polettif.osmparser.model;
 
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
+import org.locationtech.jts.geom.Coordinate;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 import polettif.osmparser.lib.Osm;
 
 import java.util.HashMap;
@@ -10,67 +17,76 @@ import java.util.Map;
  */
 public class OsmData {
 
-	private Map<Long, Osm.Node> osmNodes;
-	private Map<Long, Osm.Way> osmWays;
-	private Map<Long, Osm.Relation> osmRelations;
-
+	private Map<Long, Osm.Node> nodes;
+	private Map<Long, Osm.Way> ways;
+	private Map<Long, Osm.Relation> relations;
+	private CoordinateReferenceSystem coordinateReferenceSystem;
 
 	public OsmData() {
-		osmNodes = new HashMap<>();
-		osmWays = new HashMap<>();
-		osmRelations = new HashMap<>();
+		nodes = new HashMap<>();
+		ways = new HashMap<>();
+		relations = new HashMap<>();
+		try {
+			coordinateReferenceSystem = CRS.decode("EPSG:4326", true);
+		} catch (FactoryException ignored) {}
 	}
 
-	public OsmData(Map<Long, Osm.Node> nodes, Map<Long, Osm.Way> osmWays,
-	               Map<Long, Osm.Relation> osmRelations) {
-		this.osmNodes = nodes;
-		this.osmWays = osmWays;
-		this.osmRelations = osmRelations;
+	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
+		return coordinateReferenceSystem;
 	}
 
-	public Map<Long, Osm.Node> getNodes() {
-		return osmNodes;
-	}
+	public void transform(String targetEPSG) throws FactoryException {
+		CoordinateReferenceSystem targetCRS = CRS.decode(targetEPSG, true);
 
-	public Map<Long, Osm.Relation> getRelations() {
-		return osmRelations;
-	}
+		MathTransform mathTransform = CRS.findMathTransform(coordinateReferenceSystem, targetCRS, true);
 
-	public Map<Long, Osm.Way> getWays() {
-		return osmWays;
-	}
-
-	public Osm.Way getWay(Long id) {
-		for(Osm.Way osmWay : osmWays.values()) {
-			if(osmWay.getId().equals(id)) {
-				return osmWay;
+		for(Osm.Node node : nodes.values()) {
+			Coordinate newCoord;
+			try {
+				newCoord = JTS.transform(node.getCoord(), null, mathTransform);
+			} catch (TransformException e) {
+				throw new RuntimeException(e);
 			}
+			node.setCoord(newCoord);
 		}
-		return null;
-	}
 
-	public void addNode(Osm.Node osmNode) {
-		this.osmNodes.put(osmNode.getId(), osmNode);
-	}
-
-	public void addWay(Osm.Way osmWay) {
-		this.osmWays.put(osmWay.getId(), osmWay);
-	}
-
-	public void addRelation(Osm.Relation osmRelation) {
-		this.osmRelations.put(osmRelation.getId(), osmRelation);
+		coordinateReferenceSystem = targetCRS;
 	}
 
 	public Osm.Element getElement(Osm.ElementType type, Long refId) {
 		switch(type) {
 			case WAY:
-				return this.osmWays.get(refId);
+				return this.ways.get(refId);
 			case NODE:
-				return this.osmNodes.get(refId);
+				return this.nodes.get(refId);
 			case RELATION:
-				return this.osmNodes.get(refId);
+				return this.nodes.get(refId);
 			default:
 				throw new IllegalAccessError();
 		}
+	}
+
+	public Map<Long, Osm.Node> getNodes() {
+		return nodes;
+	}
+
+	public Map<Long, Osm.Way> getWays() {
+		return ways;
+	}
+
+	public Map<Long, Osm.Relation> getRelations() {
+		return relations;
+	}
+
+	public void addNode(Osm.Node osmNode) {
+		this.nodes.put(osmNode.getId(), osmNode);
+	}
+
+	public void addWay(Osm.Way osmWay) {
+		this.ways.put(osmWay.getId(), osmWay);
+	}
+
+	public void addRelation(Osm.Relation osmRelation) {
+		this.relations.put(osmRelation.getId(), osmRelation);
 	}
 }

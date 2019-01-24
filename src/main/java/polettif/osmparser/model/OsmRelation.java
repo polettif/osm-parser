@@ -1,9 +1,8 @@
 package polettif.osmparser.model;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.WKBWriter;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
 import polettif.osmparser.lib.Osm;
 
 import java.util.*;
@@ -83,21 +82,8 @@ public class OsmRelation extends OsmElement implements Osm.Relation {
 				new Coordinate[0])), null);
 	}
 
-	public boolean isBoundary() {
-		return tags.get("boundary") != null;
-	}
-
-	public int getAdminLevel() {
-		return Integer.parseInt(tags.get("admin_level"));
-	}
-
 	public String getName() {
 		return tags.get("name");
-	}
-
-	public String getShape() {
-		Polygon pol = getPolygon();
-		return (pol != null) ? WKBWriter.bytesToHex(new WKBWriter().write(pol)) : null;
 	}
 
 	@Override
