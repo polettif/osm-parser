@@ -1,4 +1,4 @@
-package polettif.osmparser.model;
+package polettif.osmparser.parser;
 
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -9,7 +9,11 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
+import polettif.osmparser.model.OsmMember;
+import polettif.osmparser.model.OsmNode;
+import polettif.osmparser.model.OsmRelation;
+import polettif.osmparser.model.OsmWay;
 
 import java.util.Map;
 
@@ -26,7 +30,7 @@ public class OsmData implements Osm {
 
 	private Quadtree quadtree;
 
-	public OsmData(Map<Long, Node> nodes, Map<Long, Way> ways, Map<Long, Relation> relations, String EPSG) {
+	OsmData(Map<Long, Node> nodes, Map<Long, Way> ways, Map<Long, Relation> relations, String EPSG) {
 		this.nodes = nodes;
 		this.ways = ways;
 		this.relations = relations;
@@ -70,7 +74,7 @@ public class OsmData implements Osm {
 		return quadtree;
 	}
 
-	public void connectElements() {
+	private void connectElements() {
 		for(Relation relation : relations.values()) {
 			for(Member member : relation.getMembers()) {
 				Element memberElement = this.getElement(member.geType(), member.getRefId());
@@ -124,7 +128,7 @@ public class OsmData implements Osm {
 				throw new RuntimeException(e);
 			}
 
-			node.setPoint(newPoint);
+			((OsmNode) node).setPoint(newPoint);
 			quadtree.insert(new Envelope(newPoint.getCoordinate()), node);
 		}
 	}

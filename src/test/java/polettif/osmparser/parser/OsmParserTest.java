@@ -1,10 +1,9 @@
-package polettif.osmparser;
+package polettif.osmparser.parser;
 
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.junit.Test;
-import polettif.osmparser.lib.Osm;
-import polettif.osmparser.model.OsmData;
+import polettif.osmparser.Osm;
 import polettif.osmparser.model.OsmRelation;
 import polettif.osmparser.model.OsmWay;
 

@@ -1,10 +1,9 @@
-package polettif.osmparser;
+package polettif.osmparser.parser;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.lib.Osm;
-import polettif.osmparser.model.OsmData;
+import polettif.osmparser.Osm;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,10 +20,7 @@ public class OsmParser {
 		return parse(is, null);
 	}
 
-		/**
-		 *
-		 */
-	public static OsmData parse(InputStream is, String EPSG) throws Exception {
+	private static OsmData parse(InputStream is, String EPSG) throws Exception {
 
 		Node xmlNode;
 		NodeList xmlNodesList;

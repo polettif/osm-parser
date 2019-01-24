@@ -1,6 +1,6 @@
 package polettif.osmparser.model;
 
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
 
 /**
  * @author Willy Tiengo
@@ -9,7 +9,7 @@ public class OsmMember implements Osm.Member {
 
 	private final Osm.ElementType type;
 	private final Long refId;
-	private String role;
+	private final String role;
 
 	private Osm.Element element = null;
 

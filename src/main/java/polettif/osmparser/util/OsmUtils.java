@@ -2,7 +2,7 @@ package polettif.osmparser.util;
 
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.io.WKBWriter;
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
 import polettif.osmparser.model.OsmNode;
 import polettif.osmparser.model.OsmWay;
 
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Willy Tiengo
  */
-public class OsmUtils {
+class OsmUtils {
 
 	public String getWayMiddle(List<Osm.Node> nodes) {
 		double lenMiddle, distance, lineDistance;
@@ -56,7 +56,7 @@ public class OsmUtils {
 				new WKBWriter().write(fac.createPoint(new Coordinate(lon, lat))));
 	}
 
-	public String getShape(Iterable<? extends Osm.Node> nodes) throws Exception {
+	public String getShape(Iterable<? extends Osm.Node> nodes) {
 		MultiLineString mls;
 
 		// Precisa ser um MultiLineString
@@ -85,7 +85,7 @@ public class OsmUtils {
 		return length;
 	}
 
-	public LineString getLineString(Iterable<? extends Osm.Node> nodes) {
+	private LineString getLineString(Iterable<? extends Osm.Node> nodes) {
 		List<Coordinate> coords = new ArrayList<>();
 		GeometryFactory fac = new GeometryFactory(
 		);
@@ -104,7 +104,6 @@ public class OsmUtils {
 	 * @return The MultiLineString of all ways osmMembers of this relation. If any
 	 * way osmMembers can not be found in the datase, returns
 	 * <code>null</code>.
-	 * @param osmMembers
 	 */
 	public Polygon getPolygon(Iterable<? extends Osm.Member> osmMembers) {
 		OsmWay osmWay;

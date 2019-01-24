@@ -1,4 +1,4 @@
-package polettif.osmparser.lib;
+package polettif.osmparser;
 
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.index.quadtree.Quadtree;
@@ -12,8 +12,6 @@ import java.util.Map;
  */
 public interface Osm {
 
-	CoordinateReferenceSystem getCoordinateReferenceSystem();
-
 	Osm.Element getElement(Osm.ElementType type, Long refId);
 
 	Map<Long, Osm.Node> getNodes();
@@ -24,25 +22,7 @@ public interface Osm {
 
 	Quadtree getNodeQuadtree();
 
-	enum ElementType {
-		NODE("node"),
-		WAY("way"),
-		RELATION("relation");
-
-		public final String name;
-
-		ElementType(String name) {
-			this.name = name;
-		}
-
-		public static ElementType get(String str) {
-			return ElementType.valueOf(str.toUpperCase());
-		}
-
-		public String toString() {
-			return name;
-		}
-	}
+	CoordinateReferenceSystem getCoordinateReferenceSystem();
 
 	interface Element {
 		Long getId();
@@ -56,8 +36,6 @@ public interface Osm {
 
 	interface Node extends Element {
 		Point getPoint();
-
-		void setPoint(Point newPoint);
 
 		double[] getLonLat();
 
@@ -73,12 +51,32 @@ public interface Osm {
 	}
 
 	interface Member {
-		String getRole();
+		Long getRefId();
 
 		ElementType geType();
 
-		Long getRefId();
+		String getRole();
 
 		Element getElement();
+	}
+
+	enum ElementType {
+		NODE("node"),
+		WAY("way"),
+		RELATION("relation");
+
+		final String name;
+
+		ElementType(String name) {
+			this.name = name;
+		}
+
+		public static ElementType get(String str) {
+			return ElementType.valueOf(str.toUpperCase());
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
 }

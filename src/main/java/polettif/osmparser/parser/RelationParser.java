@@ -1,10 +1,9 @@
-package polettif.osmparser;
+package polettif.osmparser.parser;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.lib.Osm;
-import polettif.osmparser.model.OsmData;
+import polettif.osmparser.Osm;
 import polettif.osmparser.model.OsmMember;
 import polettif.osmparser.model.OsmRelation;
 
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * @author zuq
  */
-public class RelationParser {
+class RelationParser {
 
 	public static boolean isRelation(Node node) {
 		return node.getNodeName().equals("relation");

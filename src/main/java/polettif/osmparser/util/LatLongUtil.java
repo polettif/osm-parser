@@ -2,7 +2,7 @@ package polettif.osmparser.util;
 
 import polettif.osmparser.model.OsmNode;
 
-public class LatLongUtil {
+class LatLongUtil {
 
     public static double distance(double lat1, double lon1,
             double lat2, double lon2) {

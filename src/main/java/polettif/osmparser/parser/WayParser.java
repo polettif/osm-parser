@@ -1,4 +1,4 @@
-package polettif.osmparser;
+package polettif.osmparser.parser;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author zuq
  */
-public class WayParser {
+class WayParser {
 
 	public static boolean isWay(Node node) {
 		return node.getNodeName().equals("way");

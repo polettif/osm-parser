@@ -3,7 +3,7 @@ package polettif.osmparser.model;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,18 +16,16 @@ public class OsmNode extends OsmElement implements Osm.Node {
 	private final double[] lonLat;
 	private Point point;
 
-	private GeometryFactory geometryFactory = new GeometryFactory();
-
-	private Map<Long, Osm.Way> containingWays = new HashMap<>();
-	private Map<Long, Osm.Relation> containingRelations = new HashMap<>();
+	private final Map<Long, Osm.Way> containingWays = new HashMap<>();
+	private final Map<Long, Osm.Relation> containingRelations = new HashMap<>();
 
 	public OsmNode(String id, double lon, double lat, String visible, String timestamp, String version, String changeset, String user, String uid, Map<String, String> tags) {
 		super(Osm.ElementType.NODE, id, visible, timestamp, version, changeset, user, uid, tags);
 		this.lonLat = new double[]{lon, lat};
-		this.point = geometryFactory.createPoint(new Coordinate(lon, lat));
+
+		this.point =  new GeometryFactory().createPoint(new Coordinate(lon, lat));
 	}
 
-	@Override
 	public void setPoint(Point newPoint) {
 		this.point = newPoint;
 	}

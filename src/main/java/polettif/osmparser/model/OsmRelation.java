@@ -1,6 +1,6 @@
 package polettif.osmparser.model;
 
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public class OsmRelation extends OsmElement implements Osm.Relation {
 
-	private List<Osm.Member> members;
+	private final List<Osm.Member> members;
 
-	private Map<Long, Osm.Relation> containingRelations = new HashMap<>();
+	private final Map<Long, Osm.Relation> containingRelations = new HashMap<>();
 
 	public OsmRelation(String id, String visible, String timestamp,
 	                   String version, String changeset, String user,

@@ -1,6 +1,6 @@
 package polettif.osmparser.model;
 
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,10 +12,10 @@ import java.util.Map;
  */
 public class OsmWay extends OsmElement implements Osm.Way {
 
-	private List<Long> nodeIds;
-	private List<Osm.Node> nodes = new ArrayList<>();
+	private final List<Long> nodeIds;
+	private final List<Osm.Node> nodes = new ArrayList<>();
 
-	private Map<Long, Osm.Relation> containingRelations = new HashMap<>();
+	private final Map<Long, Osm.Relation> containingRelations = new HashMap<>();
 
 	public OsmWay(String id, String visible, String timestamp,
 	              String version, String changeset, String user,

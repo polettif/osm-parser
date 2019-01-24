@@ -1,8 +1,8 @@
-package polettif.osmparser;
+package polettif.osmparser.parser;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import polettif.osmparser.lib.Osm;
+import polettif.osmparser.Osm;
 import polettif.osmparser.model.OsmNode;
 
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * @author zuq
  */
-public class NodeParser {
+class NodeParser {
 
 	public static boolean isNode(Node node) {
 		return (node.getNodeName().equals("node"));
