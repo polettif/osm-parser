@@ -48,6 +48,10 @@ public class OsmNode extends OsmElement implements Osm.Node {
 	}
 
 	@Override
+	public Map<Long, Osm.Relation> getContainingRelations() {
+		return containingRelations;
+	}
+
 	public void addContainingElement(Osm.Element parentElement) {
 		if(parentElement.getType().equals(Osm.ElementType.WAY)) {
 			containingWays.put(parentElement.getId(), (Osm.Way) parentElement);
@@ -56,16 +60,6 @@ public class OsmNode extends OsmElement implements Osm.Node {
 		} else {
 			throw new RuntimeException("Can't add element type " + parentElement.getType());
 		}
-	}
-
-	@Override
-	public Map<Long, Osm.Relation> getContainingRelations() {
-		return containingRelations;
-	}
-
-	@Override
-	public void update(Osm osm) {
-
 	}
 
 }

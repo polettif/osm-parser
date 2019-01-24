@@ -19,8 +19,6 @@ import java.util.Map;
  */
 public class OsmData implements Osm {
 
-//	private static final Logger log = LogManager.getLogger( OsmData.class.getName() );
-
 	private Map<Long, Osm.Node> nodes;
 	private Map<Long, Osm.Way> ways;
 	private Map<Long, Osm.Relation> relations;
@@ -34,7 +32,8 @@ public class OsmData implements Osm {
 		relations = new HashMap<>();
 		try {
 			coordinateReferenceSystem = CRS.decode("EPSG:4326", true);
-		} catch (FactoryException ignored) {}
+		} catch (FactoryException ignored) {
+		}
 	}
 
 	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
@@ -77,7 +76,7 @@ public class OsmData implements Osm {
 
 	public Quadtree getNodeQuadtree() {
 		if(quadtree == null) {
-			System.out.println("OSM is not transformed to projected coordinate System");
+			System.out.println("OSM is not transformed to a projected coordinate System");
 		}
 		return quadtree;
 	}
@@ -97,12 +96,32 @@ public class OsmData implements Osm {
 	public void updateContainers() {
 		for(Relation relation : relations.values()) {
 			for(Member member : relation.getMembers()) {
-				member.getElement().addContainingElement(relation);
+				Element memberElement = this.getElement(member.geType(), member.getRefId());
+
+				if(memberElement != null) {
+					((OsmMember) member).setElement(memberElement);
+
+					switch(member.geType()) {
+						case NODE:
+							((OsmNode) memberElement).addContainingElement(relation);
+							break;
+						case WAY:
+							((OsmWay) memberElement).addContainingElement(relation);
+							break;
+						case RELATION:
+							((OsmRelation) memberElement).addContainingElement(relation);
+							break;
+					}
+				}
 			}
 		}
-		for(Way way : ways.values()) {
-			for(Node node : way.getNodes()) {
-				node.addContainingElement(way);
+		for(Osm.Way way : ways.values()) {
+			OsmWay osmWay = (OsmWay) way;
+			for(Long nodeId : osmWay.getNodeIds()) {
+				Osm.Node node = this.nodes.get(nodeId);
+
+				osmWay.addNode(node);
+				((OsmNode) node).addContainingElement(way);
 			}
 		}
 	}

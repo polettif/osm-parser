@@ -20,7 +20,11 @@ public class OsmMember implements Osm.Member {
 	}
 
 	public void setElement(Osm.Element element) {
-		this.element = element;
+		if(this.element == null) {
+			this.element = element;
+		} else {
+			throw new RuntimeException("Cannot set element twice");
+		}
 	}
 
 	@Override
@@ -29,13 +33,13 @@ public class OsmMember implements Osm.Member {
 	}
 
 	@Override
-	public String geType() {
-		return role;
+	public Osm.ElementType geType() {
+		return type;
 	}
 
 	@Override
-	public String getRefId() {
-		return role;
+	public Long getRefId() {
+		return refId;
 	}
 
 	@Override

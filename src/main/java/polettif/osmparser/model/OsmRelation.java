@@ -28,7 +28,6 @@ public class OsmRelation extends OsmElement implements Osm.Relation {
 		return members;
 	}
 
-	@Override
 	public void addContainingElement(Osm.Element parentElement) {
 		if(parentElement.getType().equals(Osm.ElementType.RELATION)){
 			containingRelations.put(parentElement.getId(), (Osm.Relation) parentElement);
@@ -40,11 +39,6 @@ public class OsmRelation extends OsmElement implements Osm.Relation {
 	@Override
 	public Map<Long, Osm.Relation> getContainingRelations() {
 		return containingRelations;
-	}
-
-	@Override
-	public void update(Osm osm) {
-
 	}
 
 }

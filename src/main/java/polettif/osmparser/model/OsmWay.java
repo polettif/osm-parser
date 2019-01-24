@@ -24,19 +24,19 @@ public class OsmWay extends OsmElement implements Osm.Way {
 		this.nodeIds = nodeIds;
 	}
 
+	public List<Long> getNodeIds() {
+		return nodeIds;
+	}
+
+	public void addNode(Osm.Node node) {
+		nodes.add(node);
+	}
+
 	@Override
 	public List<Osm.Node> getNodes() {
 		return nodes;
 	}
 
-	@Override
-	public void update(Osm osm) {
-		for(Long nodeId : nodeIds) {
-			this.nodes.add(osm.getNodes().get(nodeId));
-		}
-	}
-
-	@Override
 	public void addContainingElement(Osm.Element parentElement) {
 		if(parentElement.getType().equals(Osm.ElementType.RELATION)){
 			containingRelations.put(parentElement.getId(), (Osm.Relation) parentElement);

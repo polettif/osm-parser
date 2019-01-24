@@ -34,20 +34,6 @@ public abstract class OsmElement implements Osm.Element {
 		this.tags = tags;
 	}
 
-	public OsmElement(Osm.ElementType type, long id, String visible, String timestamp,
-	                  String version, String changeset, String user, String uid,
-	                  Map<String, String> tags) {
-		this.id = id;
-		this.type = type;
-		this.visible = visible;
-		this.timestamp = timestamp;
-		this.version = version;
-		this.changeset = changeset;
-		this.user = user;
-		this.uid = uid;
-		this.tags = tags;
-	}
-
 	@Override
 	public Map<String, String> getTags() {
 		return tags;
@@ -62,6 +48,5 @@ public abstract class OsmElement implements Osm.Element {
 	public Osm.ElementType getType() {
 		return type;
 	}
-
 
 }

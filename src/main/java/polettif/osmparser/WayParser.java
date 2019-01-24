@@ -3,7 +3,6 @@ package polettif.osmparser;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import polettif.osmparser.lib.Osm;
 import polettif.osmparser.model.OsmData;
 import polettif.osmparser.model.OsmWay;
 
@@ -24,7 +23,7 @@ public class WayParser {
 
 		String id = atts.getNamedItem("id").getNodeValue();
 
-		List<Osm.Node> memberNodes = new ArrayList<>();
+		List<Long> memberNodeIds = new ArrayList<>();
 		NodeList children = xmlNodeWay.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++) {
 			Node xmlNode = children.item(i);
@@ -34,7 +33,7 @@ public class WayParser {
 				Long nodeId = Long.parseLong(xmlNode.getAttributes().
 						getNamedItem("ref").getNodeValue());
 
-				memberNodes.add(osm.getNodes().get(nodeId));
+				memberNodeIds.add(nodeId);
 			}
 		}
 
@@ -46,7 +45,7 @@ public class WayParser {
 				getAttribute(atts, "changeset"),
 				getAttribute(atts, "user"),
 				getAttribute(atts, "uid"),
-				memberNodes,
+				memberNodeIds,
 				OsmParser.parseTags(xmlNodeWay.getChildNodes()));
 	}
 

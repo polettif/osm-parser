@@ -48,11 +48,7 @@ public interface Osm {
 
 		Map<String, String> getTags();
 
-		void addContainingElement(Element parentElement);
-
 		Map<Long, Relation> getContainingRelations();
-
-		void update(Osm osm);
 	}
 
 	interface Node extends Element {
@@ -67,7 +63,6 @@ public interface Osm {
 
 	interface Way extends Element {
 		List<Node> getNodes();
-
 	}
 
 	interface Relation extends Element {
@@ -77,9 +72,9 @@ public interface Osm {
 	interface Member {
 		String getRole();
 
-		String geType();
+		ElementType geType();
 
-		String getRefId();
+		Long getRefId();
 
 		Element getElement();
 	}
