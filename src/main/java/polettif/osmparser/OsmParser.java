@@ -17,10 +17,14 @@ import java.util.Map;
  */
 public class OsmParser {
 
-	/**
-	 *
-	 */
 	public static OsmData parse(InputStream is) throws Exception {
+		return parse(is, null);
+	}
+
+		/**
+		 *
+		 */
+	public static OsmData parse(InputStream is, String EPSG) throws Exception {
 
 		Node xmlNode;
 		NodeList xmlNodesList;
@@ -30,28 +34,27 @@ public class OsmParser {
 
 		xmlNodesList = doc.getChildNodes().item(0).getChildNodes();
 
-		OsmData osm = new OsmData();
-		for(int i = 0; i < xmlNodesList.getLength(); i++) {
+		Map<Long, Osm.Node> nodes = new HashMap<>();
+		Map<Long, Osm.Way> ways = new HashMap<>();
+		Map<Long, Osm.Relation> relations = new HashMap<>();
 
+		for(int i = 0; i < xmlNodesList.getLength(); i++) {
 			xmlNode = xmlNodesList.item(i);
 
 			if(NodeParser.isNode(xmlNode)) {
 				Osm.Node osmNode = NodeParser.parseNode(xmlNode);
-				osm.addNode(osmNode);
-
+				nodes.put(osmNode.getId(), osmNode);
 			} else if(WayParser.isWay(xmlNode)) {
-				Osm.Way osmWay = WayParser.parseWay(osm, xmlNode);
-				osm.addWay(osmWay);
+				Osm.Way osmWay = WayParser.parseWay(xmlNode);
+				ways.put(osmWay.getId(), osmWay);
 
 			} else if(RelationParser.isRelation(xmlNode)) {
-				Osm.Relation osmRelation = RelationParser.parseRelation(osm, xmlNode);
-				osm.addRelation(osmRelation);
+				Osm.Relation osmRelation = RelationParser.parseRelation(xmlNode);
+				relations.put(osmRelation.getId(), osmRelation);
 			}
 		}
 
-		osm.updateContainers();
-
-		return osm;
+		return new OsmData(nodes, ways, relations, EPSG);
 	}
 
 	static Map<String, String> parseTags(NodeList nodes) {

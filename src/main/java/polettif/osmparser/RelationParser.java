@@ -20,7 +20,7 @@ public class RelationParser {
 		return node.getNodeName().equals("relation");
 	}
 
-	public static Osm.Relation parseRelation(OsmData osm, Node xmlNodeRelation) {
+	public static Osm.Relation parseRelation(Node xmlNodeRelation) {
 		NamedNodeMap atts = xmlNodeRelation.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();

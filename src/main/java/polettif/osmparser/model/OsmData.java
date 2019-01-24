@@ -11,7 +11,6 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import polettif.osmparser.lib.Osm;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,48 +18,37 @@ import java.util.Map;
  */
 public class OsmData implements Osm {
 
-	private Map<Long, Osm.Node> nodes;
-	private Map<Long, Osm.Way> ways;
-	private Map<Long, Osm.Relation> relations;
+	private final Map<Long, Osm.Node> nodes;
+	private final Map<Long, Osm.Way> ways;
+	private final Map<Long, Osm.Relation> relations;
 
-	private CoordinateReferenceSystem coordinateReferenceSystem;
+	private CoordinateReferenceSystem coordSys = null;
+
 	private Quadtree quadtree;
 
-	public OsmData() {
-		nodes = new HashMap<>();
-		ways = new HashMap<>();
-		relations = new HashMap<>();
-		try {
-			coordinateReferenceSystem = CRS.decode("EPSG:4326", true);
-		} catch (FactoryException ignored) {
-		}
-	}
+	public OsmData(Map<Long, Node> nodes, Map<Long, Way> ways, Map<Long, Relation> relations, String EPSG) {
+		this.nodes = nodes;
+		this.ways = ways;
+		this.relations = relations;
 
-	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
-		return coordinateReferenceSystem;
-	}
+		connectElements();
 
-	public void transform(String targetEPSG) throws FactoryException {
-		CoordinateReferenceSystem targetCRS = CRS.decode(targetEPSG, true);
-		this.quadtree = new Quadtree();
-
-		MathTransform mathTransform = CRS.findMathTransform(coordinateReferenceSystem, targetCRS, true);
-
-		for(Osm.Node node : nodes.values()) {
-			Point newPoint;
+		if(EPSG != null) {
 			try {
-				newPoint = (Point) JTS.transform(node.getPoint(), mathTransform);
-			} catch (TransformException e) {
+				this.coordSys = CRS.decode(EPSG, true);
+			} catch (FactoryException e) {
 				throw new RuntimeException(e);
 			}
-
-			node.setPoint(newPoint);
-			quadtree.insert(new Envelope(newPoint.getCoordinate()), node);
+			transform();
 		}
-
-		coordinateReferenceSystem = targetCRS;
 	}
 
+	@Override
+	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
+		return coordSys;
+	}
+
+	@Override
 	public Osm.Element getElement(Osm.ElementType type, Long refId) {
 		switch(type) {
 			case WAY:
@@ -74,6 +62,7 @@ public class OsmData implements Osm {
 		}
 	}
 
+	@Override
 	public Quadtree getNodeQuadtree() {
 		if(quadtree == null) {
 			System.out.println("OSM is not transformed to a projected coordinate System");
@@ -81,19 +70,7 @@ public class OsmData implements Osm {
 		return quadtree;
 	}
 
-	public void addNode(Osm.Node osmNode) {
-		this.nodes.put(osmNode.getId(), osmNode);
-	}
-
-	public void addWay(Osm.Way osmWay) {
-		this.ways.put(osmWay.getId(), osmWay);
-	}
-
-	public void addRelation(Osm.Relation osmRelation) {
-		this.relations.put(osmRelation.getId(), osmRelation);
-	}
-
-	public void updateContainers() {
+	public void connectElements() {
 		for(Relation relation : relations.values()) {
 			for(Member member : relation.getMembers()) {
 				Element memberElement = this.getElement(member.geType(), member.getRefId());
@@ -115,6 +92,7 @@ public class OsmData implements Osm {
 				}
 			}
 		}
+
 		for(Osm.Way way : ways.values()) {
 			OsmWay osmWay = (OsmWay) way;
 			for(Long nodeId : osmWay.getNodeIds()) {
@@ -123,6 +101,31 @@ public class OsmData implements Osm {
 				osmWay.addNode(node);
 				((OsmNode) node).addContainingElement(way);
 			}
+		}
+	}
+
+	private void transform()  {
+		this.quadtree = new Quadtree();
+
+		CoordinateReferenceSystem crsWGS84;
+		MathTransform mathTransform;
+		try {
+			crsWGS84 = CRS.decode("EPSG:4326", true);
+			mathTransform = CRS.findMathTransform(crsWGS84, coordSys, true);
+		} catch (FactoryException ignored) {
+			throw new RuntimeException("Unable to transform map");
+		}
+
+		for(Osm.Node node : nodes.values()) {
+			Point newPoint;
+			try {
+				newPoint = (Point) JTS.transform(node.getPoint(), mathTransform);
+			} catch (TransformException e) {
+				throw new RuntimeException(e);
+			}
+
+			node.setPoint(newPoint);
+			quadtree.insert(new Envelope(newPoint.getCoordinate()), node);
 		}
 	}
 

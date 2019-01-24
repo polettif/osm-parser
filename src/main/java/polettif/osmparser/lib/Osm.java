@@ -2,6 +2,7 @@ package polettif.osmparser.lib;
 
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.index.quadtree.Quadtree;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import java.util.Map;
  * @author polettif
  */
 public interface Osm {
+
+	CoordinateReferenceSystem getCoordinateReferenceSystem();
 
 	Osm.Element getElement(Osm.ElementType type, Long refId);
 
