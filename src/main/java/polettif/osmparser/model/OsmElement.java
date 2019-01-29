@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public abstract class OsmElement implements Osm.Element {
 

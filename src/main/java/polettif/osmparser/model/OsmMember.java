@@ -4,6 +4,7 @@ import polettif.osmparser.Osm;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public class OsmMember implements Osm.Member {
 

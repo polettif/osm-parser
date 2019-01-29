@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public class OsmWay extends OsmElement implements Osm.Way {
 

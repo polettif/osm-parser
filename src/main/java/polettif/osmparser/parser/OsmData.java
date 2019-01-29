@@ -19,6 +19,7 @@ import java.util.Map;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public class OsmData implements Osm {
 

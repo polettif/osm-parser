@@ -9,14 +9,15 @@ import java.util.Objects;
 
 /**
  * @author zuq
+ * @author polettif
  */
 class NodeParser {
 
-	public static boolean isNode(Node node) {
+	static boolean isNode(Node node) {
 		return (node.getNodeName().equals("node"));
 	}
 
-	public static Osm.Node parseNode(Node xmlNodeNode) {
+	static Osm.Node parseNode(Node xmlNodeNode) {
 		NamedNodeMap atts = xmlNodeNode.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
@@ -33,8 +34,6 @@ class NodeParser {
 				getAttribute(atts, "uid"),
 				OsmParser.parseTags(xmlNodeNode.getChildNodes()));
 	}
-
-	// Private Methods ---------------------------------------------------------
 
 	private static String getAttribute(NamedNodeMap atts, String key) {
 		Node node = atts.getNamedItem(key);

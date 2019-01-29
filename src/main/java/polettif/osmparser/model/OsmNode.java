@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public class OsmNode extends OsmElement implements Osm.Node {
 

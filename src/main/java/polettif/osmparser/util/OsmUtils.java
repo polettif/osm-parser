@@ -31,7 +31,6 @@ class OsmUtils {
 			n2 = (OsmNode) nodes.get(i + 1);
 
 			lineDistance = LatLongUtil.distance(n1, n2);
-//			lineDistance = 0;
 
 			if((distance + lineDistance) > lenMiddle) {
 				distance = (lenMiddle - distance) / lineDistance;

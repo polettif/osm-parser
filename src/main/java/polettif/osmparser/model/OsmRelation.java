@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public class OsmRelation extends OsmElement implements Osm.Relation {
 

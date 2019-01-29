@@ -1,6 +1,7 @@
 package polettif.osmparser.parser;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import polettif.osmparser.Osm;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 /**
  * @author Willy Tiengo
+ * @author polettif
  */
 public class OsmParser {
 
@@ -51,6 +53,11 @@ public class OsmParser {
 		}
 
 		return new OsmData(nodes, ways, relations, EPSG);
+	}
+
+	private static String getAttribute(NamedNodeMap atts, String key) {
+		Node node = atts.getNamedItem(key);
+		return (node == null) ? null : node.getNodeValue();
 	}
 
 	static Map<String, String> parseTags(NodeList nodes) {

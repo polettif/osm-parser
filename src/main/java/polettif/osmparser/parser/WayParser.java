@@ -10,14 +10,15 @@ import java.util.List;
 
 /**
  * @author zuq
+ * @author polettif
  */
 class WayParser {
 
-	public static boolean isWay(Node node) {
+	static boolean isWay(Node node) {
 		return node.getNodeName().equals("way");
 	}
 
-	public static OsmWay parseWay(Node xmlNodeWay) {
+	static OsmWay parseWay(Node xmlNodeWay) {
 		NamedNodeMap atts = xmlNodeWay.getAttributes();
 
 		String id = atts.getNamedItem("id").getNodeValue();
