@@ -18,11 +18,10 @@ import java.util.Map;
  */
 public class OsmParser {
 
-	public static OsmData parse(InputStream is) throws Exception {
-		return parse(is, null);
-	}
-
-	private static OsmData parse(InputStream is, String EPSG) throws Exception {
+	public static OsmData parse(InputStream is, OsmParserFilter filter, String EPSG) throws Exception {
+		if(filter == null) {
+			filter = new AcceptAllFilter();
+		}
 
 		Node xmlNode;
 		NodeList xmlNodesList;
@@ -41,27 +40,31 @@ public class OsmParser {
 
 			if(NodeParser.isNode(xmlNode)) {
 				Osm.Node osmNode = NodeParser.parseNode(xmlNode);
-				nodes.put(osmNode.getId(), osmNode);
+				if(filter.acceptNode(osmNode)) {
+					nodes.put(osmNode.getId(), osmNode);
+				}
 			} else if(WayParser.isWay(xmlNode)) {
 				Osm.Way osmWay = WayParser.parseWay(xmlNode);
-				ways.put(osmWay.getId(), osmWay);
-
+				if(filter.acceptWay(osmWay)) {
+					ways.put(osmWay.getId(), osmWay);
+				}
 			} else if(RelationParser.isRelation(xmlNode)) {
 				Osm.Relation osmRelation = RelationParser.parseRelation(xmlNode);
-				relations.put(osmRelation.getId(), osmRelation);
+				if(filter.acceptRelation(osmRelation)) {
+					relations.put(osmRelation.getId(), osmRelation);
+				}
 			}
 		}
 
 		return new OsmData(nodes, ways, relations, EPSG);
 	}
 
-	private static String getAttribute(NamedNodeMap atts, String key) {
+	static String getAttribute(NamedNodeMap atts, String key) {
 		Node node = atts.getNamedItem(key);
 		return (node == null) ? null : node.getNodeValue();
 	}
 
 	static Map<String, String> parseTags(NodeList nodes) {
-
 		Map<String, String> tags = new HashMap<>();
 
 		for(int i = 0; i < nodes.getLength(); i++) {
@@ -84,4 +87,22 @@ public class OsmParser {
 			tags.put(key, value);
 		}
 	}
+
+	private static class AcceptAllFilter implements OsmParserFilter {
+		@Override
+		public boolean acceptNode(Osm.Node node) {
+			return true;
+		}
+
+		@Override
+		public boolean acceptWay(Osm.Way way) {
+			return true;
+		}
+
+		@Override
+		public boolean acceptRelation(Osm.Relation relation) {
+			return true;
+		}
+	}
+
 }

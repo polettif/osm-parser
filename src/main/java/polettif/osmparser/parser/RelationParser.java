@@ -29,23 +29,18 @@ class RelationParser {
 		List<Osm.Member> members = getMembers(xmlNodeRelation.getChildNodes());
 
 		return new OsmRelation(id,
-				getAttribute(atts, "visible"),
-				getAttribute(atts, "timestamp"),
-				getAttribute(atts, "version"),
-				getAttribute(atts, "changeset"),
-				getAttribute(atts, "user"),
-				getAttribute(atts, "uid"),
+				OsmParser.getAttribute(atts, "visible"),
+				OsmParser.getAttribute(atts, "timestamp"),
+				OsmParser.getAttribute(atts, "version"),
+				OsmParser.getAttribute(atts, "changeset"),
+				OsmParser.getAttribute(atts, "user"),
+				OsmParser.getAttribute(atts, "uid"),
 				members,
 				OsmParser.parseTags(xmlNodeRelation.getChildNodes()));
 
 	}
 
 	// Private Methods ---------------------------------------------------------
-
-	private static String getAttribute(NamedNodeMap atts, String key) {
-		Node node = atts.getNamedItem(key);
-		return (node == null) ? null : node.getNodeValue();
-	}
 
 	private static List<Osm.Member> getMembers(NodeList children) {
 		List<Osm.Member> members = new ArrayList<>();

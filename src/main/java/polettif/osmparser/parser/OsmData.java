@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Willy Tiengo
  * @author polettif
  */
-public class OsmData implements Osm {
+class OsmData implements Osm {
 
 	private final Map<Long, Osm.Node> nodes;
 	private final Map<Long, Osm.Way> ways;

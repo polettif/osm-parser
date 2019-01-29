@@ -24,19 +24,15 @@ class NodeParser {
 
 		return new OsmNode(
 				id,
-				Double.parseDouble(Objects.requireNonNull(getAttribute(atts, "lon"))),
-				Double.parseDouble(Objects.requireNonNull(getAttribute(atts, "lat"))),
-				getAttribute(atts, "visible"),
-				getAttribute(atts, "timestamp"),
-				getAttribute(atts, "version"),
-				getAttribute(atts, "changeset"),
-				getAttribute(atts, "user"),
-				getAttribute(atts, "uid"),
+				Double.parseDouble(Objects.requireNonNull(OsmParser.getAttribute(atts, "lon"))),
+				Double.parseDouble(Objects.requireNonNull(OsmParser.getAttribute(atts, "lat"))),
+				OsmParser.getAttribute(atts, "visible"),
+				OsmParser.getAttribute(atts, "timestamp"),
+				OsmParser.getAttribute(atts, "version"),
+				OsmParser.getAttribute(atts, "changeset"),
+				OsmParser.getAttribute(atts, "user"),
+				OsmParser.getAttribute(atts, "uid"),
 				OsmParser.parseTags(xmlNodeNode.getChildNodes()));
 	}
 
-	private static String getAttribute(NamedNodeMap atts, String key) {
-		Node node = atts.getNamedItem(key);
-		return (node == null) ? null : node.getNodeValue();
-	}
 }

@@ -60,19 +60,11 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
 	    <dependency>
 		    <groupId>org.geotools</groupId>
 		    <artifactId>gt-main</artifactId>
 		    <version>${geotools.version}</version>
 	    </dependency>
-
 	    <dependency>
 		    <groupId>org.geotools</groupId>
 		    <artifactId>gt-referencing</artifactId>
@@ -87,6 +79,11 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-epsg-extension</artifactId>
             <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.18</version>
         </dependency>
     </dependencies>
 

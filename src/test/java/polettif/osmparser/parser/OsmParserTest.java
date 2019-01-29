@@ -22,7 +22,7 @@ public class OsmParserTest {
 		InputStream bis = new BufferedInputStream(getClass().getResourceAsStream("/montenegro-latest.osm.bz2"));
 		CompressorInputStream input = new CompressorStreamFactory().createCompressorInputStream(bis);
 
-		OsmData osm = OsmParser.parse(input);
+		OsmData osm = OsmParser.parse(input, null, null);
 		assertEquals(990250, osm.getNodes().size());
 		assertEquals(61263, osm.getWays().size());
 		assertEquals(517, osm.getRelations().size());

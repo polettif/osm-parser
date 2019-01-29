@@ -39,19 +39,14 @@ class WayParser {
 
 		return new OsmWay(
 				id,
-				getAttribute(atts, "visible"),
-				getAttribute(atts, "timestamp"),
-				getAttribute(atts, "version"),
-				getAttribute(atts, "changeset"),
-				getAttribute(atts, "user"),
-				getAttribute(atts, "uid"),
+				OsmParser.getAttribute(atts, "visible"),
+				OsmParser.getAttribute(atts, "timestamp"),
+				OsmParser.getAttribute(atts, "version"),
+				OsmParser.getAttribute(atts, "changeset"),
+				OsmParser.getAttribute(atts, "user"),
+				OsmParser.getAttribute(atts, "uid"),
 				memberNodeIds,
 				OsmParser.parseTags(xmlNodeWay.getChildNodes()));
-	}
-
-	private static String getAttribute(NamedNodeMap atts, String key) {
-		Node node = atts.getNamedItem(key);
-		return (node == null) ? null : node.getNodeValue();
 	}
 
 }
