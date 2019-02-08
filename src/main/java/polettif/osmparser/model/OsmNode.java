@@ -61,4 +61,9 @@ public class OsmNode extends OsmElement implements Osm.Node {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return String.format("OsmNode[%d (%.1f / %.1f)]", super.getId(), point.getCoordinate().x, point.getCoordinate().y);
+	}
+
 }

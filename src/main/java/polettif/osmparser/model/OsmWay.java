@@ -50,4 +50,10 @@ public class OsmWay extends OsmElement implements Osm.Way {
 	public Map<Long, Osm.Relation> getContainingRelations() {
 		return containingRelations;
 	}
+
+	@Override
+	public String toString() {
+		return "OsmWay[" + super.getId() + "]";
+	}
+
 }

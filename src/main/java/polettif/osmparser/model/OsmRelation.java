@@ -42,4 +42,8 @@ public class OsmRelation extends OsmElement implements Osm.Relation {
 		return containingRelations;
 	}
 
+	@Override
+	public String toString() {
+		return "OsmRelation[" + super.getId() + "]";
+	}
 }
