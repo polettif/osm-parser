@@ -130,7 +130,7 @@ class OsmData implements Osm {
 			}
 
 			((OsmNode) node).setPoint(newPoint);
-			quadtree.insert(new Envelope(newPoint.getCoordinate()), node);
+			quadtree.insert(newPoint.getEnvelopeInternal(), node);
 		}
 	}
 

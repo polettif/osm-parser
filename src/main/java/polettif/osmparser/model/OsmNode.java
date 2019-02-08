@@ -24,7 +24,7 @@ public class OsmNode extends OsmElement implements Osm.Node {
 		super(Osm.ElementType.NODE, id, visible, timestamp, version, changeset, user, uid, tags);
 		this.lonLat = new double[]{lon, lat};
 
-		this.point =  new GeometryFactory().createPoint(new Coordinate(lon, lat));
+		this.point = new GeometryFactory().createPoint(new Coordinate(lon, lat));
 	}
 
 	public void setPoint(Point newPoint) {
